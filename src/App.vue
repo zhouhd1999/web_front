@@ -5,7 +5,7 @@
         <el-header class="header" height="80px">
 
           <div><p class="ziti">OUR WEBSITE</p></div>
-          <div style="position: relative;float: left;top: -115px" v-show="returnBody" @click="choose('/')"><i class="el-icon-back"></i></div>
+          <div style="position: relative;float: left;top: -115px" v-show="returnBody" @click="goTo('/')"><i class="el-icon-back"></i></div>
           <el-dropdown style="float: right;position: relative;top: -117px;right: 20px " v-show="WelcomeBtn" @command="handleCommand">
               <el-avatar :size="50" :src="circleUrl"></el-avatar>
             <el-dropdown-menu slot="dropdown" >
@@ -34,7 +34,7 @@
           :close-on-click-modal="false"
           :before-close="handleClose">
       <el-dialog
-              width="50%"
+              width="40%"
               title="注册"
               :visible.sync="innerVisible"
               :close-on-click-modal="false"
@@ -52,7 +52,8 @@
               <el-form-item label="手机号码" prop="age">
                 <el-input v-model.number="ruleForm.age"></el-input>
               </el-form-item>
-              <el-form-item>
+              <el-form-item style="margin-left: 323px">
+                <el-button type="info" @click="register_cancel">取消</el-button>
                 <el-button type="primary" @click="submit('ruleForm')">提交</el-button>
               </el-form-item>
             </el-form>
@@ -155,8 +156,8 @@
           ]
         },
         ruleForm1: {
-          pass: '123456',
-          name: 'root'
+          pass: '',
+          name: ''
         },
         rules1: {
           pass: [
@@ -176,10 +177,16 @@
       };
     },
     methods:{
+
+      register_cancel:function(){
+        this.innerVisible=false;
+      },
+
+      //头像下面的菜单
       handleCommand(command){
+        //注销
         if (command==='cancellation'){
-          sessionStorage.removeItem('user');
-          sessionStorage.removeItem('permission');
+            sessionStorage.clear();
           this.$message({
             type: 'success',
             message:'注销成功'
@@ -197,8 +204,33 @@
       submit:function(formName){
         this.$refs[formName].validate((valid) => {
           if (valid){
-
-            this.innerVisible=false;
+            this.$req.post('/user/insertUser',{
+                userId:this.ruleForm.acct,
+                password:this.ruleForm.pass,
+                nickName:this.ruleForm.acct,
+                permission:2
+            })
+                .then(res=>{
+                   if (eval(res.data).code===0){
+                       this.$message({
+                           type: 'success',
+                           message:'注册成功'
+                       });
+                       this.ruleForm1.name=this.ruleForm.acct;
+                       this.ruleForm1.pass=this.ruleForm.pass;
+                       this.innerVisible=false;
+                   }else if (eval(res.data).code===2){
+                       this.$message({
+                           type: 'error',
+                           message:'该账号已存在'
+                       });
+                   } else {
+                       this.$message({
+                           type: 'error',
+                           message:'注册失败'
+                       });
+                   }
+                });
           }else{
             this.$message({
               type: 'error',
@@ -233,6 +265,7 @@
                     this.LoginBtn=false;
                     sessionStorage.setItem('user',this.ruleForm1.name);
                     sessionStorage.setItem('permission',this.data.permission);
+                    sessionStorage.setItem('nickName',this.data.nickName);
                   }
                   else {
                     this.$message({
@@ -256,7 +289,7 @@
       ShowLogin:function(){
         this.outVisible=true;
       },
-      choose: function (index) {
+      goTo: function (index) {
         this.$router.push(index);
         this.returnBody=false;
       },

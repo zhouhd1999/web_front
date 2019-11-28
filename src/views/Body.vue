@@ -5,23 +5,23 @@
             <el-container style="padding: 0" class="nav-main">
                 <el-header style="width: 1019.2px">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" >
-                        <el-menu-item index="1" @click="choose('/')">首页</el-menu-item>
+                        <el-menu-item index="1" @click="goTo('/')">首页</el-menu-item>
                         <el-submenu index="2">
                             <template slot="title">生活笔记</template>
-                            <el-menu-item index="2-1" @click="choose('/Body/PersonalEssay')">个人随笔</el-menu-item>
-                            <el-menu-item index="2-2" @click="choose('/Body/PersonalDiary')">个人日记</el-menu-item>
-                            <el-menu-item index="2-3" @click="choose('/Body/PersonalShow')">个人展示</el-menu-item>
+                            <el-menu-item index="2-1" @click="goTo('/Body/PersonalEssay')">个人随笔</el-menu-item>
+                            <el-menu-item index="2-2" @click="goTo('/Body/PersonalDiary')">个人日记</el-menu-item>
+                            <el-menu-item index="2-3" @click="goTo('/Body/PersonalShow')">个人展示</el-menu-item>
                         </el-submenu>
                         <el-submenu index="3">
                             <template slot="title">技术杂谈</template>
-                            <el-menu-item index="3-1" @click="choose('/Body/Java')">Java</el-menu-item>
-                            <el-menu-item index="3-2" @click="choose('/Body/C')">C/C++</el-menu-item>
-                            <el-menu-item index="3-3" @click="choose('/Body/Python')">Python</el-menu-item>
+                            <el-menu-item index="3-1" @click="goTo('/Body/Java')">Java</el-menu-item>
+                            <el-menu-item index="3-2" @click="goTo('/Body/C')">C/C++</el-menu-item>
+                            <el-menu-item index="3-3" @click="goTo('/Body/Python')">Python</el-menu-item>
                         </el-submenu>
                         <el-menu-item index="4">福利专区</el-menu-item>
                         <el-menu-item index="5">关于博主</el-menu-item>
-                        <el-menu-item index="6" @click="choose('/Body/LeaveMessage')">给我留言</el-menu-item>
-                        <el-menu-item index="7" @click="choose('/Body/Sponsorship')">赞助作者</el-menu-item>
+                        <el-menu-item index="6" @click="goTo('/Body/LeaveMessage')">给我留言</el-menu-item>
+                        <el-menu-item index="7" @click="goTo('/Body/Sponsorship')">赞助作者</el-menu-item>
                         <el-menu-item index="8">技术交流</el-menu-item>
                         <el-menu-item index="9">项目合作</el-menu-item>
                     </el-menu>
@@ -45,7 +45,7 @@
             };
         },
         methods:{
-            choose: function (index) {
+            goTo: function (index) {
                 this.$router.push(index);
             },
         }

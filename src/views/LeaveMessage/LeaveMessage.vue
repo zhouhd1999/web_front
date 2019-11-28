@@ -23,7 +23,7 @@
                 <div v-for="item in message">
                     <el-row style="margin: 15px">
                         <el-col :span="2">
-                            <div style="color: #409EFF;padding: 5px;word-wrap : break-word ;margin-top: 10px"><span>{{item.reviewerName}}</span></div>
+                            <div style="color: #409EFF;padding: 5px;word-wrap : break-word ;margin-top: 3px"><span>{{item.reviewerName}}</span></div>
                         </el-col>
                         <el-col :span="18" style="background: #fbfbfb;border: 1px #eee solid;font-size: 15px;margin-bottom: 5px;border-radius: 5px">
                             <div class="shixin"></div>
@@ -60,7 +60,7 @@
                 pagesize:5, //每页的评论数
                 alipay:alipay,
                 commentAreaId:1,
-                reviewer:'熬粑马',
+                reviewer:'',
                 placeholder:'写点什么....',
                 ruleForm:{
                     desc:'',
@@ -102,6 +102,9 @@
             handleUserList() {
                 this.message = this.InitMessage.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize);
             },
+
+
+            //提交评论
             submitForm() {
                 if (sessionStorage.length===0){
                     this.$message({
@@ -109,33 +112,40 @@
                         message:'请登录'
                     });
                 }
-                if (this.ruleForm.desc!==''){
-                    this.$req.post('/comment/submitComment',{
-                        commentAreaId:this.commentAreaId,
-                        content:this.ruleForm.desc,
-                        reviewerName:this.reviewer
-                    })
-                        .then(res=>{
-                            if (eval(res.data).code===0){
-                                this.$message({
-                                    type: 'info',
-                                    message:'发表成功'
-                                });
-                                this.ruleForm.desc='';
-                                this.getComment().then(res=>{
-                                    this.handleUserList();
-                                })
-                            }
+                else{
+                    this.reviewer=sessionStorage.getItem('nickName');
+                    if (this.ruleForm.desc!==''){
+                        this.$req.post('/comment/submitComment',{
+                            commentAreaId:this.commentAreaId,
+                            content:this.ruleForm.desc,
+                            reviewerName:this.reviewer
                         })
-                }else{
-
+                            .then(res=>{
+                                if (eval(res.data).code===0){
+                                    this.$message({
+                                        type: 'info',
+                                        message:'发表成功'
+                                    });
+                                    this.ruleForm.desc='';
+                                    this.getComment().then(res=>{
+                                        this.handleUserList();
+                                    })
+                                }
+                            })
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message:'请填写内容'
+                        });
+                    }
                 }
             },
         },
         created() {
             this.getComment().then(res=>{
                 this.handleUserList();
-            })
+            });
+
         },
         beforeCreate() {
 
