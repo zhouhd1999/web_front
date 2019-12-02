@@ -3,15 +3,15 @@
     <div id="nav">
       <el-container>
         <el-header class="header" height="80px">
-
           <div><p class="ziti">OUR WEBSITE</p></div>
-          <div style="position: relative;float: left;top: -115px" v-show="returnBody" @click="goTo('/')"><i class="el-icon-back"></i></div>
+          <div style="position: relative;float: left;top: -115px" v-show="returnBody" @click="goTo('/')">
+              <i class="el-icon-back"></i>
+          </div>
           <el-dropdown style="float: right;position: relative;top: -117px;right: 20px " v-show="WelcomeBtn" @command="handleCommand">
               <el-avatar :size="50" :src="circleUrl"></el-avatar>
             <el-dropdown-menu slot="dropdown" >
               <el-dropdown-item command="openUrl">个人中心</el-dropdown-item>
               <el-dropdown-item style="text-align: center" command="cancellation">注  销</el-dropdown-item>
-
             </el-dropdown-menu>
           </el-dropdown>
           <div style="float: right;font-size: 20px;position: relative;top: -100px" v-show="LoginBtn"><i class="el-icon-switch-button"></i><el-button type="text" style="margin-left: 3px;font-size: 15px;margin-right: 10px;color: #eee" @click="ShowLogin">登录</el-button></div>
@@ -71,11 +71,11 @@
         <el-button type="primary" @click="Login('ruleForm1')">登 录</el-button>
       </span>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
-
   export default {
     data(){
       //外
@@ -303,7 +303,6 @@
         this.WelcomeBtn=true;
       }
     }
-
   }
 </script>
 

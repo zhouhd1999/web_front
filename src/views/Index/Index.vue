@@ -2,7 +2,6 @@
     <div class="index">
         <div>
             <el-row>
-
                 <el-col :span="24">
                     <el-carousel :interval="3000" arrow="always" height="300px" type="card">
                         <el-carousel-item v-for="item in imageBox" :key="item.id">
@@ -12,7 +11,6 @@
                         </el-carousel-item>
                     </el-carousel>
                 </el-col>
-
             </el-row>
         </div>
         <div class="rank">
