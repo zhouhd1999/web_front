@@ -207,7 +207,7 @@
             this.$req.post('/user/insertUser',{
                 userId:this.ruleForm.acct,
                 password:this.ruleForm.pass,
-                nickName:this.ruleForm.acct,
+                nickname:this.ruleForm.acct,
                 permission:2
             })
                 .then(res=>{
@@ -258,14 +258,14 @@
                     this.data=eval(res.data).data;
                     this.$message({
                       type: 'success',
-                      message:this.data.nickName + '  欢迎您!'
+                      message:this.data.nickname + '  欢迎您!'
                     });
                     this.outVisible=false;
                     this.WelcomeBtn=true;
                     this.LoginBtn=false;
                     sessionStorage.setItem('user',this.ruleForm1.name);
                     sessionStorage.setItem('permission',this.data.permission);
-                    sessionStorage.setItem('nickName',this.data.nickName);
+                    sessionStorage.setItem('nickname',this.data.nickname);
                   }
                   else {
                     this.$message({

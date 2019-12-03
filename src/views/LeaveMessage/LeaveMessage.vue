@@ -29,7 +29,7 @@
                             <div class="shixin"></div>
                             <div class="kongxin"></div>
                             <div style="padding: 10px"><span >{{item.content}}<br/></span></div>
-                            <span style="color: #bbb;font-size: 14px;margin-left: 10px">{{item.datetime}}</span>
+                            <span style="color: #bbb;font-size: 14px;margin-left: 10px">{{item.dateTime}}</span>
                         </el-col>
                     </el-row>
                 </div>
@@ -113,7 +113,7 @@
                     });
                 }
                 else{
-                    this.reviewer=sessionStorage.getItem('nickName');
+                    this.reviewer=sessionStorage.getItem('nickname');
                     if (this.ruleForm.desc!==''){
                         this.$req.post('/comment/submitComment',{
                             commentAreaId:this.commentAreaId,

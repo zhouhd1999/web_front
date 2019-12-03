@@ -30,7 +30,7 @@
                                     <el-col :span="16">
                                         <div style="font-size: 14px;color: #4d4d4d">
                                             <span>ID：</span><span>{{ID}}</span><br/><br/>
-                                            <span>昵称：</span><span>{{nickName}}</span><br/><br/>
+                                            <span>昵称：</span><span>{{nickname}}</span><br/><br/>
                                             <span>电话号码：</span><span>{{tell}}</span><br/><br/>
                                             <span>简介：</span><span>{{introduction}}</span><br/><br/>
                                         </div>
@@ -60,8 +60,8 @@
                 <el-form-item label="ID">
                     <el-input type="text" :placeholder=idPlaceholder :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="昵称" prop="nickName">
-                    <el-input type="text" v-model="ruleForm.nickName"></el-input>
+                <el-form-item label="昵称" prop="nickname">
+                    <el-input type="text" v-model="ruleForm.nickname"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号码" prop="age">
                     <el-input v-model.number="ruleForm.age" ></el-input>
@@ -107,12 +107,12 @@
                 url:"D:\\Web",
                 //fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
                 ruleForm: {
-                    nickName:'',
+                    nickname:'',
                     age:[],
                     introduction:''
                 },
                 rules: {
-                    nickName:[
+                    nickname:[
                         { validator: checkNickName, trigger:'blur'}
                     ],
                     age: [
@@ -122,7 +122,7 @@
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 theVisible:false,
                 ID:"",
-                nickName: "",
+                nickname: "",
                 tell:"",
                 introduction:"",
 
@@ -140,7 +140,7 @@
                     if (valid){
                         this.$req.post('/user/updateUser',{
                             userId:sessionStorage.getItem('user'),
-                            nickName:this.ruleForm.nickName,
+                            nickname:this.ruleForm.nickname,
                             tell:this.ruleForm.age,
                             introduction:this.ruleForm.introduction
                         })
@@ -173,10 +173,10 @@
                     .then(res=>{
                         if (eval(res.data).code===0){
                             this.ID=sessionStorage.getItem('user');
-                            this.nickName=eval(res.data).data.nickName;
+                            this.nickname=eval(res.data).data.nickname;
                             this.tell=eval(res.data).data.tell;
                             this.introduction=eval(res.data).data.introduction;
-                            this.ruleForm.nickName=eval(res.data).data.nickName;
+                            this.ruleForm.nickname=eval(res.data).data.nickname;
                             this.ruleForm.age=parseInt(eval(res.data).data.tell);
                             this.ruleForm.introduction=eval(res.data).data.introduction;
                         }else{
