@@ -31,7 +31,9 @@
                                         <div style="font-size: 14px;color: #4d4d4d">
                                             <span>ID：</span><span>{{ID}}</span><br/><br/>
                                             <span>昵称：</span><span>{{nickname}}</span><br/><br/>
+                                            <span>年龄：</span><span>{{age}}</span><br/><br/>
                                             <span>电话号码：</span><span>{{tell}}</span><br/><br/>
+                                            <span>职业：</span><span>{{profession}}</span><br/><br/>
                                             <span>简介：</span><span>{{introduction}}</span><br/><br/>
                                         </div>
                                     </el-col>
@@ -63,8 +65,14 @@
                 <el-form-item label="昵称" prop="nickname">
                     <el-input type="text" v-model="ruleForm.nickname"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="age">
+                <el-form-item label="年龄" prop="age">
                     <el-input v-model.number="ruleForm.age" ></el-input>
+                </el-form-item>
+                <el-form-item label="手机号码" prop="number">
+                    <el-input v-model.number="ruleForm.number" ></el-input>
+                </el-form-item>
+                <el-form-item label="职业" prop="profession">
+                    <el-input v-model.number="ruleForm.profession" ></el-input>
                 </el-form-item>
                 <el-form-item label="简介">
                     <el-input type="textarea" v-model="ruleForm.introduction"></el-input>
@@ -89,7 +97,7 @@
                     callback();
                 }
             };
-            let checkAge = (rule, value, callback) => {
+            let checkNumber = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('号码不能为空'));
                 }
@@ -108,22 +116,26 @@
                 //fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
                 ruleForm: {
                     nickname:'',
-                    age:[],
+                    age:'',
+                    number:'',
+                    profession:"",
                     introduction:''
                 },
                 rules: {
                     nickname:[
                         { validator: checkNickName, trigger:'blur'}
                     ],
-                    age: [
-                        { validator: checkAge, trigger: 'blur' }
+                    number: [
+                        { validator: checkNumber, trigger: 'blur' }
                     ],
                 },
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 theVisible:false,
                 ID:"",
                 nickname: "",
+                age:"",
                 tell:"",
+                profession:"",
                 introduction:"",
 
             };
@@ -138,19 +150,36 @@
             submit:function(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid){
-                        this.$req.post('/user/updateUser',{
-                            userId:sessionStorage.getItem('user'),
-                            nickname:this.ruleForm.nickname,
-                            tell:this.ruleForm.age,
-                            introduction:this.ruleForm.introduction
+                        this.$req.post('/information/update_information',{
+                            uid:sessionStorage.getItem('uid'),
+                            //userId:sessionStorage.getItem('userId'),
+                            //nickname:this.ruleForm.nickname,
+                            inAge:this.ruleForm.age,
+                            inPhoneNumber:this.ruleForm.number,
+                            inProfession:this.ruleForm.profession,
+                            inIntroduction:this.ruleForm.introduction
                         })
                             .then(res=>{
                                if (eval(res.data).code===0) {
-                                   this.$message({
-                                       type: 'success',
-                                       message:'修改成功！'
-                                   });
-                                   this.theVisible=false;
+                                   this.$req.post('/user/update_user',{
+                                       userId:sessionStorage.getItem('userId'),
+                                       nickname:this.ruleForm.nickname,
+                                   })
+                                       .then(ret=>{
+                                           if (eval(ret.data).code===0){
+                                               this.$message({
+                                                   type: 'success',
+                                                   message:'修改成功！'
+                                               });
+                                               this.theVisible=false;
+                                               this.getUserMessage();
+                                           }else{
+                                               this.$message({
+                                                   type: 'error',
+                                                   message:'修改失败！'
+                                               });
+                                           }
+                                       })
                                }else{
                                    this.$message({
                                        type: 'error',
@@ -167,18 +196,24 @@
                 });
             },
             getUserMessage(){
-                this.$req.post('/user/getUserMessage',{
-                    userId:sessionStorage.getItem('user'),
+                this.$req.post('/information/get_information_by_uid',{
+                    uid:sessionStorage.getItem('uid'),
                 })
                     .then(res=>{
+                        console.log(res.data);
                         if (eval(res.data).code===0){
-                            this.ID=sessionStorage.getItem('user');
-                            this.nickname=eval(res.data).data.nickname;
-                            this.tell=eval(res.data).data.tell;
-                            this.introduction=eval(res.data).data.introduction;
-                            this.ruleForm.nickname=eval(res.data).data.nickname;
-                            this.ruleForm.age=parseInt(eval(res.data).data.tell);
-                            this.ruleForm.introduction=eval(res.data).data.introduction;
+                            this.ID=sessionStorage.getItem('userId');
+                            this.nickname=sessionStorage.getItem('nickname');
+                            this.age=eval(res.data).data.inAge;
+                            this.tell=eval(res.data).data.inPhoneNumber;
+                            this.profession=eval(res.data).data.inProfession;
+                            this.introduction=eval(res.data).data.inIntroduction;
+
+                            this.ruleForm.nickname=this.nickname;
+                            this.ruleForm.age=this.age;
+                            this.ruleForm.number=this.tell;
+                            this.ruleForm.profession=this.profession;
+                            this.ruleForm.introduction=this.introduction
                         }else{
                             this.$message({
                                 type: 'error',

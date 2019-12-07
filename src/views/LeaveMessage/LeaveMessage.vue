@@ -79,7 +79,7 @@
             //先new了一个promise对象 ，把请求放在里面，调成功后，resolve() 理解为 return出去，调用时就可以用 .then()来处理异步问题
             getComment: function(){
                 return new Promise(((resolve) => {
-                        this.$req.post('/comment/getComment',{
+                        this.$req.post('/comment/get_comment',{
                             commentAreaId: this.commentAreaId,
                         })
                             .then(res=>{
@@ -115,7 +115,7 @@
                 else{
                     this.reviewer=sessionStorage.getItem('nickname');
                     if (this.ruleForm.desc!==''){
-                        this.$req.post('/comment/submitComment',{
+                        this.$req.post('/comment/submit_comment',{
                             commentAreaId:this.commentAreaId,
                             content:this.ruleForm.desc,
                             reviewerName:this.reviewer

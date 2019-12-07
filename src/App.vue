@@ -17,8 +17,8 @@
           <div style="float: right;font-size: 20px;position: relative;top: -100px" v-show="LoginBtn"><i class="el-icon-switch-button"></i><el-button type="text" style="margin-left: 3px;font-size: 15px;margin-right: 10px;color: #eee" @click="ShowLogin">登录</el-button></div>
         </el-header>
         <el-container>
-         <router-view/>
-        </el-container>
+          <router-view/>
+      </el-container>
         <el-footer class="footer" height="60px">
           <p>熬粑马版权所有</p>
         </el-footer>
@@ -49,9 +49,9 @@
               <el-form-item label="确认密码" prop="checkPass">
                 <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
               </el-form-item>
-              <el-form-item label="手机号码" prop="age">
-                <el-input v-model.number="ruleForm.age"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="手机号码" prop="age">-->
+<!--                <el-input v-model.number="ruleForm.age"></el-input>-->
+<!--              </el-form-item>-->
               <el-form-item style="margin-left: 323px">
                 <el-button type="info" @click="register_cancel">取消</el-button>
                 <el-button type="primary" @click="submit('ruleForm')">提交</el-button>
@@ -139,7 +139,7 @@
           acct:'',
           pass: '',
           checkPass: '',
-          age: ''
+          //age: ''
         },
         rules: {
           acct: [
@@ -151,9 +151,9 @@
           checkPass: [
             { validator: validatePass2, trigger: 'blur' }
           ],
-          age: [
-            { validator: checkAge, trigger: 'blur' }
-          ]
+          // age: [
+          //   { validator: checkAge, trigger: 'blur' }
+          // ]
         },
         ruleForm1: {
           pass: '',
@@ -204,7 +204,7 @@
       submit:function(formName){
         this.$refs[formName].validate((valid) => {
           if (valid){
-            this.$req.post('/user/insertUser',{
+            this.$req.post('/user/insert_user',{
                 userId:this.ruleForm.acct,
                 password:this.ruleForm.pass,
                 nickname:this.ruleForm.acct,
@@ -249,9 +249,9 @@
       Login:function(formName){
         this.$refs[formName].validate((valid) => {
             if (valid){
-              this.$req.post('/user/Login',{
-                name:this.ruleForm1.name,
-                pass:this.ruleForm1.pass
+              this.$req.post('/user/login',{
+                UserId:this.ruleForm1.name,
+                password:this.ruleForm1.pass
               })
                 .then(res=>{
                   if (eval(res.data).code===0){
@@ -263,9 +263,11 @@
                     this.outVisible=false;
                     this.WelcomeBtn=true;
                     this.LoginBtn=false;
-                    sessionStorage.setItem('user',this.ruleForm1.name);
+                    sessionStorage.setItem('uid',this.data.uid);
+                    sessionStorage.setItem('userId',this.data.userId);
                     sessionStorage.setItem('permission',this.data.permission);
                     sessionStorage.setItem('nickname',this.data.nickname);
+                    console.log(sessionStorage);
                   }
                   else {
                     this.$message({
