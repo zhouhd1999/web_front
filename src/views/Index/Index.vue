@@ -32,7 +32,7 @@
                     <img :src="tubiao" style="height: 20px;width: 20px" />
                     <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tag}}</span>
                     <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                        <el-button type="text" style="font-size: 20px">{{item.title}}</el-button>
+                        <el-button type="text" style="font-size: 20px" @click="open_article">{{item.title}}</el-button>
                     </div>
                 </div>
                 <div class="mid">
@@ -46,9 +46,7 @@
                     <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.date}}</span>
                     <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
                     <span style="color: #f78585;">{{item.like}}个喜欢</span>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -86,7 +84,9 @@
             }
         },
         methods:{
-
+            open_article:function () {
+                this.$router.push('/Article');
+            }
         },
         components: {
         },

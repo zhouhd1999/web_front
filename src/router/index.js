@@ -11,6 +11,8 @@ import Sponsorship from "../views/Sponsorship/Sponsorship";
 import LeaveMessage from "../views/LeaveMessage/LeaveMessage";
 import Person from "../views/Person";
 import Body from "../views/Body";
+import Article_edit from "../views/Article_edit";
+import Article from "../views/Article";
 
 Vue.use(VueRouter);
 
@@ -88,6 +90,16 @@ const routes = [
     path:'/Person',
     name:'Person',
     component:Person,
+  },
+  {
+    path:'/Article_edit',
+    name:'Article_edit',
+    component:Article_edit,
+  },
+  {
+    path:'/Article',
+    name:'Article',
+    component:Article,
   },
 
 

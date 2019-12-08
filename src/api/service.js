@@ -5,8 +5,8 @@ const service = axios.create({
 });
 
 //拦截器
-axios.interceptors.response.use(function (response) {
-   console.log('响应:', response.config.url, response)
+service.interceptors.response.use(function (response) {
+   const res = response.data
    return response.data
 })
 

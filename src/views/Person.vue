@@ -4,8 +4,8 @@
             <el-aside width="250px">
             </el-aside>
             <el-main class="el_main_body">
-                <el-tabs :tab-position="'left'" style="height: 600px;">
-                    <el-tab-pane label="个人资料">
+                <el-tabs :tab-position="'left'" style="height: 100%">
+                    <el-tab-pane label="个人资料" style="height: 480px">
                         <div style="padding: 0 32px 30px">
                             <div style="font-size: 20px">
                                 <h3>个人资料</h3>
@@ -44,7 +44,39 @@
                             </div>
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane label="我的文章">我的文章</el-tab-pane>
+                    <el-tab-pane label="我的文章">
+                        <div style="padding: 0 32px 30px">
+                            <div style="font-size: 20px">
+                                <h3>我的文章</h3>
+                            </div>
+                            <el-button style="float: right;position: relative;top: -60px" @click="new_article">新建文章</el-button>
+                            <el-divider></el-divider>
+                            <div v-for="(item,index) in article" class="content">
+                                <div class="top">
+                                    <img :src="tubiao" style="height: 20px;width: 20px" />
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tag}}</span>
+                                    <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
+                                        <el-button type="text" style="font-size: 20px">{{item.title}}</el-button>
+                                    </div>
+                                </div>
+                                <div class="mid">
+                                    <el-row>
+                                        <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
+                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.introduction}}<br/></span></div></el-col>
+                                    </el-row>
+                                </div>
+                                <div class="bottom" style="float: right;font-size: 14px;color: #777">
+                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.author}}</span>
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.date}}</span>
+                                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
+                                    <span style="color: #f78585;">{{item.like}}个喜欢</span>
+
+                                </div>
+                                <el-divider></el-divider>
+                            </div>
+
+                        </div>
+                    </el-tab-pane>
                     <el-tab-pane label="我的喜欢">我的喜欢</el-tab-pane>
                 </el-tabs>
             </el-main>
@@ -87,6 +119,10 @@
 </template>
 
 <script>
+    import aixin from '@/assets/爱心.png'
+    import tubiao from '@/assets/标签.png'
+    import hhh from '@/assets/img-3.png'
+
     export default {
         name: "Person",
         data(){
@@ -129,6 +165,9 @@
                         { validator: checkNumber, trigger: 'blur' }
                     ],
                 },
+                aixin:aixin,
+                tubiao:tubiao,
+                hhh:hhh,
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 theVisible:false,
                 ID:"",
@@ -137,6 +176,11 @@
                 tell:"",
                 profession:"",
                 introduction:"",
+                article:[{tag:'Python',title:'231qwewqeqweqweqwqe23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                    {tag:'C',title:'231qweqwqwe23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                    {tag:'Python',title:'23qwewqeqweqwqweqweqwweqweqweqwqwe123',img: '123',introduction:'5464643qweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee33333eeeee6456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                    {tag:'C',title:'231qweqweqewweq23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                    {tag:'Python',title:'23123',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5}]
 
             };
         },
@@ -147,6 +191,7 @@
             handlePreview(file) {
                 console.log(file);
             },
+
             submit:function(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid){
@@ -160,13 +205,13 @@
                             inIntroduction:this.ruleForm.introduction
                         })
                             .then(res=>{
-                               if (eval(res.data).code===0) {
+                               if (res.code===0) {
                                    this.$req.post('/user/update_user',{
                                        userId:sessionStorage.getItem('userId'),
                                        nickname:this.ruleForm.nickname,
                                    })
                                        .then(ret=>{
-                                           if (eval(ret.data).code===0){
+                                           if (ret.code===0){
                                                this.$message({
                                                    type: 'success',
                                                    message:'修改成功！'
@@ -201,13 +246,13 @@
                 })
                     .then(res=>{
                         console.log(res.data);
-                        if (eval(res.data).code===0){
+                        if (res.code===0){
                             this.ID=sessionStorage.getItem('userId');
                             this.nickname=sessionStorage.getItem('nickname');
-                            this.age=eval(res.data).data.inAge;
-                            this.tell=eval(res.data).data.inPhoneNumber;
-                            this.profession=eval(res.data).data.inProfession;
-                            this.introduction=eval(res.data).data.inIntroduction;
+                            this.age=res.data.inAge;
+                            this.tell=parseInt(res.data.inPhoneNumber);
+                            this.profession=res.data.inProfession;
+                            this.introduction=res.data.inIntroduction;
 
                             this.ruleForm.nickname=this.nickname;
                             this.ruleForm.age=this.age;
@@ -221,6 +266,10 @@
                             });
                         }
                     })
+            },
+
+            new_article:function () {
+                this.$router.push('/Article_edit');
             }
         },
         computed:{
@@ -241,5 +290,16 @@
         background-color: white;
         width: 1019.2px;
         margin-bottom: 20px;
+    }
+    .top{
+        height: 40px;
+
+    }
+    .content{
+        margin-top: 10px;
+        position: relative;
+        background-color: white;
+        height: 200px;
+        padding: 20px 15px 30px 20px;
     }
 </style>

@@ -83,7 +83,7 @@
                             commentAreaId: this.commentAreaId,
                         })
                             .then(res=>{
-                                this.InitMessage=eval(res.data).data;
+                                this.InitMessage=res.data;
                                 resolve()
                             })
                     }
@@ -121,7 +121,7 @@
                             reviewerName:this.reviewer
                         })
                             .then(res=>{
-                                if (eval(res.data).code===0){
+                                if (res.code===0){
                                     this.$message({
                                         type: 'info',
                                         message:'发表成功'

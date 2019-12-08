@@ -4,7 +4,7 @@
       <el-container>
         <el-header class="header" height="80px">
           <div><p class="ziti">OUR WEBSITE</p></div>
-          <div style="position: relative;float: left;top: -115px" v-show="returnBody" @click="goTo('/')">
+          <div style="position: relative;float: left;top: -115px" v-show="returnBack" @click="goBack">
               <i class="el-icon-back"></i>
           </div>
           <el-dropdown style="float: right;position: relative;top: -117px;right: 20px " v-show="WelcomeBtn" @command="handleCommand">
@@ -172,7 +172,7 @@
         innerVisible:false,
         LoginBtn:true,
         WelcomeBtn:false,
-        returnBody:false,
+        returnBack:true,
         data:[]
       };
     },
@@ -196,7 +196,7 @@
         }
         if (command==='openUrl'){
           this.$router.push('/Person');
-          this.returnBody=true;
+          //this.returnBack=true;
         }
       },
 
@@ -211,7 +211,7 @@
                 permission:2
             })
                 .then(res=>{
-                   if (eval(res.data).code===0){
+                   if (res.code===0){
                        this.$message({
                            type: 'success',
                            message:'注册成功'
@@ -219,7 +219,7 @@
                        this.ruleForm1.name=this.ruleForm.acct;
                        this.ruleForm1.pass=this.ruleForm.pass;
                        this.innerVisible=false;
-                   }else if (eval(res.data).code===2){
+                   }else if (res.code===2){
                        this.$message({
                            type: 'error',
                            message:'该账号已存在'
@@ -254,8 +254,8 @@
                 password:this.ruleForm1.pass
               })
                 .then(res=>{
-                  if (eval(res.data).code===0){
-                    this.data=eval(res.data).data;
+                  if (res.code===0){
+                    this.data=res.data;
                     this.$message({
                       type: 'success',
                       message:this.data.nickname + '  欢迎您!'
@@ -291,10 +291,16 @@
       ShowLogin:function(){
         this.outVisible=true;
       },
+
       goTo: function (index) {
         this.$router.push(index);
-        this.returnBody=false;
+        //this.returnBack=false;
       },
+
+      goBack:function () {
+        this.$router.go(-1);
+        //this.returnBack=false;
+      }
     },
     created() {
       if(sessionStorage.length===0){
