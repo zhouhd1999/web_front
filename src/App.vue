@@ -20,7 +20,7 @@
           <router-view/>
       </el-container>
         <el-footer class="footer" height="60px">
-          <p>熬粑马版权所有</p>
+          <p>谈笑风生工作室版权所有</p>
         </el-footer>
       </el-container>
     </div>

@@ -77,7 +77,41 @@
 
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane label="我的喜欢">我的喜欢</el-tab-pane>
+                    <el-tab-pane label="我的喜欢">
+                        <div style="padding: 0 32px 30px">
+                            <div style="font-size: 20px">
+                                <h3>我的喜欢</h3>
+                            </div>
+                            <el-divider></el-divider>
+                            <div v-for="(item,index) in article" class="content">
+                                <div class="top">
+                                    <img :src="tubiao" style="height: 20px;width: 20px" />
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tag}}</span>
+                                    <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
+                                        <el-button type="text" style="font-size: 20px">{{item.title}}</el-button>
+                                    </div>
+                                </div>
+                                <div class="mid">
+                                    <el-row>
+                                        <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
+                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.introduction}}<br/></span></div></el-col>
+                                    </el-row>
+                                </div>
+                                <div class="bottom" style="float: right;font-size: 14px;color: #777">
+                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.author}}</span>
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.date}}</span>
+                                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
+                                    <span style="color: #f78585;">{{item.like}}个喜欢</span>
+
+                                </div>
+                                <el-divider></el-divider>
+                            </div>
+
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane label="我的云盘">
+                        <el-button @click="test">网盘测试按钮</el-button>
+                    </el-tab-pane>
                 </el-tabs>
             </el-main>
         </el-container>
@@ -176,8 +210,8 @@
                 tell:"",
                 profession:"",
                 introduction:"",
-                article:[{tag:'Python',title:'231qwewqeqweqweqwqe23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
-                    {tag:'C',title:'231qweqwqwe23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                article:[{tag:'Python',title:'sklearn贝叶斯分类器的案例',img: '123',introduction:'贝叶斯分类器的原理比较简单，可以自己去百度了解原理，这篇文章就是讲一讲贝叶斯分类器的实际应用案例。案例：研究期末考试前一周的行为（假设有三种：1.打游戏 2.逛街 3.学习）对于期末开考试的影响（就是是否挂科）。首先要有一个样本库，没办法，只能自己去创建了，我们就按照这个形式来创建样本库，形...',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                    {tag:'Java',title:'Java世界最常用的工具类库',img: '123',introduction:'jdk1.8之前，日期操作类常用的只有java.util.Date和java.util.Calendar，但是这2个类的易用性实在太差了，SimpleDateFormat不是线程安全的 。这就逼迫用户去选择第三方的日期操作类，Joda Time就是其中的佼佼者。后来Java自身也意识到了这个问题，于是jdk1.8大量借鉴了Joda Time的理念，推出了新的日期api，...',date:'2019/11/29',author:'123',link:'132323132',like:5},
                     {tag:'Python',title:'23qwewqeqweqwqweqweqwweqweqweqwqwe123',img: '123',introduction:'5464643qweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee33333eeeee6456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
                     {tag:'C',title:'231qweqweqewweq23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
                     {tag:'Python',title:'23123',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5}]
@@ -185,6 +219,14 @@
             };
         },
         methods:{
+            test:function(){
+                this.$req.post('/cloud/start')
+                    .then(res=>{
+
+                    })
+            },
+
+
             handleRemove(file, fileList) {
                 console.log(file, fileList);
             },
