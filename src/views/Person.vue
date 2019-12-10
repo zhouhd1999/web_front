@@ -110,7 +110,8 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="我的云盘">
-                        <el-button @click="test">网盘测试按钮</el-button>
+                        <el-button @click="test1">网盘测试按钮1</el-button>
+                        <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update"/>
                     </el-tab-pane>
                 </el-tabs>
             </el-main>
@@ -219,10 +220,25 @@
             };
         },
         methods:{
-            test:function(){
+            test1:function(){
                 this.$req.post('/cloud/start')
                     .then(res=>{
 
+                    })
+            },
+            update(e){
+                let file = e.target.files[0];
+                let param = new FormData();
+                param.append('file',file);
+                let config = {
+                    headers:{'Content-Type':'multipart/form-data'}
+                }; //添加请求头
+                this.$req.post('/uploadFile',{
+                    file
+                    //file:param,
+                })
+                    .then(res=>{
+                        console.log(res.data);
                     })
             },
 
