@@ -6,7 +6,7 @@
             <el-main>
                 <div style="background-color: white">
                     <mavon-editor
-                            style="height: 600px;width: 1019.2px"
+                            style="height: 600px;width: 975.2px"
                             class="md"
                             :value="value"
                             :subfield="false"
@@ -30,18 +30,18 @@
         name: "Article",
         data() {
             return {
-                value: '### test' // markdown语法
+                articleId:this.$route.params.articleId,
+                value: ''
             };
         },
         methods:{
-            getArticle(aId){
-                this.$req.post('/article/get_article_by_a_id',{
-                    aId:16
+            getArticle(){
+                this.$req.post('/article/get_article_by_article_id',{
+                    articleId:this.articleId
                 })
                     .then(res=>{
                         if (res.code===0){
-                            this.value=res.data.acontent;
-                            console.log(res.data);
+                            this.value=res.data.articleContent;
                         }
                     })
             }

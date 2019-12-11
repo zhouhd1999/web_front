@@ -111,7 +111,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="我的云盘">
                         <el-button @click="test1">网盘测试按钮1</el-button>
-                        <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update"/>
+                        <input id="file" name="file" type="file" @change="update"/>
                     </el-tab-pane>
                 </el-tabs>
             </el-main>
@@ -213,7 +213,7 @@
                 introduction:"",
                 article:[{tag:'Python',title:'sklearn贝叶斯分类器的案例',img: '123',introduction:'贝叶斯分类器的原理比较简单，可以自己去百度了解原理，这篇文章就是讲一讲贝叶斯分类器的实际应用案例。案例：研究期末考试前一周的行为（假设有三种：1.打游戏 2.逛街 3.学习）对于期末开考试的影响（就是是否挂科）。首先要有一个样本库，没办法，只能自己去创建了，我们就按照这个形式来创建样本库，形...',date:'2019/11/29',author:'123',link:'132323132',like:5},
                     {tag:'Java',title:'Java世界最常用的工具类库',img: '123',introduction:'jdk1.8之前，日期操作类常用的只有java.util.Date和java.util.Calendar，但是这2个类的易用性实在太差了，SimpleDateFormat不是线程安全的 。这就逼迫用户去选择第三方的日期操作类，Joda Time就是其中的佼佼者。后来Java自身也意识到了这个问题，于是jdk1.8大量借鉴了Joda Time的理念，推出了新的日期api，...',date:'2019/11/29',author:'123',link:'132323132',like:5},
-                    {tag:'Python',title:'23qwewqeqweqwqweqweqwweqweqweqwqwe123',img: '123',introduction:'5464643qweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee33333eeeee6456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
+                    {tag:'Python',title:'23qwewqeqweqwqweqweqwweqweqweqwqwe123',img: '123',troduction:'5464643qweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee33333eeeee6456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
                     {tag:'C',title:'231qweqweqewweq23',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5},
                     {tag:'Python',title:'23123',img: '123',introduction:'5464646456465',date:'2019/11/29',author:'123',link:'132323132',like:5}]
 
@@ -227,19 +227,15 @@
                     })
             },
             update(e){
-                let file = e.target.files[0];
-                let param = new FormData();
-                param.append('file',file);
-                let config = {
-                    headers:{'Content-Type':'multipart/form-data'}
-                }; //添加请求头
-                this.$req.post('/uploadFile',{
-                    file
-                    //file:param,
+                let formData = new FormData();
+                formData.append('file', e.target.files[0]);
+                let  url = '/cloud/uploadFile';
+                let config = 'multipart/form-data;';
+
+                this.$req.post(url,formData, config).then(function (response) {
+                    console.log(response.data)
+
                 })
-                    .then(res=>{
-                        console.log(res.data);
-                    })
             },
 
 
@@ -254,19 +250,19 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid){
                         this.$req.post('/information/update_information',{
-                            uid:sessionStorage.getItem('uid'),
+                            userId:sessionStorage.getItem('userId'),
                             //userId:sessionStorage.getItem('userId'),
                             //nickname:this.ruleForm.nickname,
-                            inAge:this.ruleForm.age,
-                            inPhoneNumber:this.ruleForm.number,
-                            inProfession:this.ruleForm.profession,
-                            inIntroduction:this.ruleForm.introduction
+                            infoAge:this.ruleForm.age,
+                            infoPhoneNumber:this.ruleForm.number,
+                            infoProfession:this.ruleForm.profession,
+                            infoIntroduction:this.ruleForm.introduction
                         })
                             .then(res=>{
                                if (res.code===0) {
                                    this.$req.post('/user/update_user',{
                                        userId:sessionStorage.getItem('userId'),
-                                       nickname:this.ruleForm.nickname,
+                                       userNickname:this.ruleForm.nickname,
                                    })
                                        .then(ret=>{
                                            if (ret.code===0){
@@ -299,18 +295,17 @@
                 });
             },
             getUserMessage(){
-                this.$req.post('/information/get_information_by_uid',{
-                    uid:sessionStorage.getItem('uid'),
+                this.$req.post('/information/get_information_by_user_id',{
+                    userId:sessionStorage.getItem('userId'),
                 })
                     .then(res=>{
-                        console.log(res.data);
                         if (res.code===0){
-                            this.ID=sessionStorage.getItem('userId');
-                            this.nickname=sessionStorage.getItem('nickname');
-                            this.age=res.data.inAge;
-                            this.tell=parseInt(res.data.inPhoneNumber);
-                            this.profession=res.data.inProfession;
-                            this.introduction=res.data.inIntroduction;
+                            this.ID=sessionStorage.getItem('userAccount');
+                            this.nickname=sessionStorage.getItem('userNickname');
+                            this.age=res.data.infoAge;
+                            this.tell=parseInt(res.data.infoPhoneNumber);
+                            this.profession=res.data.infoProfession;
+                            this.introduction=res.data.infoIntroduction;
 
                             this.ruleForm.nickname=this.nickname;
                             this.ruleForm.age=this.age;

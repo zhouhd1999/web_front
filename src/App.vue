@@ -205,10 +205,10 @@
         this.$refs[formName].validate((valid) => {
           if (valid){
             this.$req.post('/user/insert_user',{
-                userId:this.ruleForm.acct,
-                password:this.ruleForm.pass,
-                nickname:this.ruleForm.acct,
-                permission:2
+                userAccount:this.ruleForm.acct,
+                userPassword:this.ruleForm.pass,
+                userNickname:this.ruleForm.acct,
+                userPermission:2
             })
                 .then(res=>{
                    if (res.code===0){
@@ -250,7 +250,7 @@
         this.$refs[formName].validate((valid) => {
             if (valid){
               this.$req.post('/user/login',{
-                UserId:this.ruleForm1.name,
+                userAccount:this.ruleForm1.name,
                 password:this.ruleForm1.pass
               })
                 .then(res=>{
@@ -258,15 +258,15 @@
                     this.data=res.data;
                     this.$message({
                       type: 'success',
-                      message:this.data.nickname + '  欢迎您!'
+                      message:this.data.userNickname + '  欢迎您!'
                     });
                     this.outVisible=false;
                     this.WelcomeBtn=true;
                     this.LoginBtn=false;
-                    sessionStorage.setItem('uid',this.data.uid);
                     sessionStorage.setItem('userId',this.data.userId);
-                    sessionStorage.setItem('permission',this.data.permission);
-                    sessionStorage.setItem('nickname',this.data.nickname);
+                    sessionStorage.setItem('userAccount',this.data.userAccount);
+                    sessionStorage.setItem('userPermission',this.data.userPermission);
+                    sessionStorage.setItem('userNickname',this.data.userNickname);
                     console.log(sessionStorage);
                   }
                   else {
