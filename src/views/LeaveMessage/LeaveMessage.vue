@@ -113,7 +113,7 @@
                     });
                 }
                 else{
-                    this.reviewer=sessionStorage.getItem('nickname');
+                    this.reviewer=sessionStorage.getItem('userNickname');
                     if (this.ruleForm.desc!==''){
                         this.$req.post('/comment/submit_comment',{
                             commentAreaId:this.commentAreaId,

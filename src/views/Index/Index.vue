@@ -143,7 +143,7 @@
                     .then(res=>{
                         if(res.code===0){
                             this.article=res.data;
-                            console.log(this.article);
+                            //console.log(this.article);
                         }else{
                             this.$message({
                                 type: 'error',

@@ -23,7 +23,7 @@
                         <div style="padding: 0 10px 20px 10px">
                             <el-tag class="tag_class">选择标签：</el-tag>
                             <el-radio-group v-model="radio" v-for="item in data">
-                                <el-radio :label=item.tid style="margin-left: 20px">{{item.tname}}</el-radio>
+                                <el-radio :label=item.tagId style="margin-left: 20px">{{item.tagName}}</el-radio>
                             </el-radio-group>
                         </div>
                     </div>
@@ -64,12 +64,12 @@
 
             submit_article:function(){
                 this.$req.post('/article/insert_article',{
-                    uid:sessionStorage.getItem('uid'),
-                    tId:this.radio,
-                    aContent:this.value,
-                    aName:this.title,
-                    aDescribe:this.describe,
-                    aState:1
+                    userId:sessionStorage.getItem('userId'),
+                    tagId:this.radio,
+                    articleContent:this.value,
+                    articleName:this.title,
+                    articleDescribe:this.describe,
+                    articleState:1
                 })
                     .then(res=>{
                         if (res.code===0){

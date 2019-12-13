@@ -4,7 +4,7 @@
             <el-aside width="250px">
             </el-aside>
             <el-main class="el_main_body">
-                <el-tabs :tab-position="'left'" style="height: 100%">
+                <el-tabs :tab-position="'left'" style="height: 100%" @tab-click="getCloudInfo">
                     <el-tab-pane label="个人资料" style="height: 480px">
                         <div style="padding: 0 32px 30px">
                             <div style="font-size: 20px">
@@ -16,15 +16,15 @@
                                     <el-col :span="4">
                                         <div style="margin-left: 10px">
                                             <el-avatar :size="100" :src="circleUrl"></el-avatar>
-                                            <el-upload
-                                                    class="upload-demo"
-                                                    :action=url
-                                                    :on-preview="handlePreview"
-                                                    :on-remove="handleRemove"
-                                                    list-type="picture">
-                                                <el-button type="text" style="margin-left: 20px">修改头像</el-button>
-                                                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                                            </el-upload>
+<!--                                            <el-upload-->
+<!--                                                    class="upload-demo"-->
+<!--                                                    :action=url-->
+<!--                                                    :on-preview="handlePreview"-->
+<!--                                                    :on-remove="handleRemove"-->
+<!--                                                    list-type="picture">-->
+<!--                                                <el-button type="text" style="margin-left: 20px">修改头像</el-button>-->
+<!--                                                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--                                            </el-upload>-->
                                         </div>
                                     </el-col>
                                     <el-col :span="16">
@@ -109,9 +109,70 @@
 
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane label="我的云盘">
-                        <el-button @click="test1">网盘测试按钮1</el-button>
-                        <input id="file" name="file" type="file" @change="update"/>
+                    <el-tab-pane label="我的云盘" style="height: 503px" >
+                        <div style="padding: 0 32px 30px">
+                            <div style="font-size: 20px">
+                                <h3>我的网盘</h3>
+                            </div>
+                            <el-divider></el-divider>
+                            <el-button type="text" @click="new_file">新建文件夹</el-button>
+                            <el-button type="text" @click="delete_file">删除</el-button>
+                            <div class="block">
+                                <el-tree
+                                        :data="data"
+                                        node-key="id"
+                                        draggable
+                                        ref="tree"
+                                        highlight-current
+                                        :default-expand-all="false"
+                                        :check-on-click-node="true"
+                                        :expand-on-click-node="false"
+                                        @node-click="handleNodeClick">
+                                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                                    <span>{{ node.label }}</span>
+                                  </span>
+                                </el-tree>
+                            </div>
+                        </div>
+                        <el-button @click="jsontest">123</el-button>
+<!--                        <el-button @click="test1">网盘测试按钮1</el-button>-->
+<!--                        <input id="file" name="file" type="file" @change="getFile($event)"/>-->
+<!--                        <el-button @click="update">上传</el-button>-->
+<!--                        <input type="file" ref="myfile">-->
+<!--                        <el-button @click="importData" type="success" size="mini" icon="el-icon-upload2">导入数据</el-button>-->
+<!--                        <el-upload-->
+<!--                                class="upload-demo"-->
+<!--                                action="/cloud/uploadFile"-->
+<!--                                :on-preview="handlePreview"-->
+<!--                                :on-remove="handleRemove"-->
+<!--                                :before-remove="beforeRemove"-->
+<!--                                multiple-->
+<!--                                :limit="3"-->
+<!--                                :on-exceed="handleExceed"-->
+<!--                                :file-list="fileList">-->
+<!--                            <el-button size="small" type="primary">点击上传</el-button>-->
+<!--                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--                        </el-upload>-->
+<!--                        <form>-->
+<!--                            <input type="file" @change="getFile($event)">-->
+<!--                            <button class="button button-primary button-pill button-small" @click="update($event)">提交</button>-->
+<!--                        </form>-->
+                        <div id="uploadDiv">
+                            <input type="file" value="" id="file" @change="uploadConfig" name="file">
+                        </div>
+<!--                        <el-button @click="jsontest">211</el-button>-->
+<!--                        <el-upload-->
+<!--                                style="display: inline"-->
+<!--                                :show-file-list="false"-->
+<!--                                :on-success="onSuccess"-->
+<!--                                :on-error="onError"-->
+<!--                                :before-upload="beforeUpload"-->
+<!--                                action="/cloud/uploadFile">-->
+<!--                            <el-button size="mini" type="success" >123</el-button>-->
+<!--                        </el-upload>-->
+
+
+
                     </el-tab-pane>
                 </el-tabs>
             </el-main>
@@ -154,6 +215,7 @@
 </template>
 
 <script>
+    let id = 1000;
     import aixin from '@/assets/爱心.png'
     import tubiao from '@/assets/标签.png'
     import hhh from '@/assets/img-3.png'
@@ -183,8 +245,7 @@
                 }
             };
             return{
-                url:"D:\\Web",
-                //fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+                data: [],
                 ruleForm: {
                     nickname:'',
                     age:'',
@@ -208,7 +269,10 @@
                 ID:"",
                 nickname: "",
                 age:"",
+                file:'',
                 tell:"",
+                node:'',
+                node_data:'',
                 profession:"",
                 introduction:"",
                 article:[{tag:'Python',title:'sklearn贝叶斯分类器的案例',img: '123',introduction:'贝叶斯分类器的原理比较简单，可以自己去百度了解原理，这篇文章就是讲一讲贝叶斯分类器的实际应用案例。案例：研究期末考试前一周的行为（假设有三种：1.打游戏 2.逛街 3.学习）对于期末开考试的影响（就是是否挂科）。首先要有一个样本库，没办法，只能自己去创建了，我们就按照这个形式来创建样本库，形...',date:'2019/11/29',author:'123',link:'132323132',like:5},
@@ -220,19 +284,122 @@
             };
         },
         methods:{
-            test1:function(){
-                this.$req.post('/cloud/start')
-                    .then(res=>{
+            jsontest:function(){
+                console.log((JSON.stringify(this.data)));
+            },
 
+
+            //树形控件
+            new_file:function(){
+                this.append(this.node_data);
+            },
+            delete_file:function(){
+                if(this.node_data.id===1){
+                    this.$message({
+                        type: 'error',
+                        message: '根目录禁止删除!'
+                    });
+                }else{
+                    this.remove(this.node,this.node_data);
+                }
+            },
+            handleNodeClick(data,node) {
+
+                this.node_data=data;
+                this.node=node;
+            },
+            append(data) {
+                this.$prompt('请输入文件名', '新建文件夹', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputPattern: '',
+                }).then(({ value }) => {
+                    this.$message({
+                        type: 'success',
+                        message: '新建文件夹成功!'
+                    });
+                    const newChild = { id: id++, label: value, children: [] };
+                    if (!data.children) {
+                        this.$set(data, 'children', []);
+                    }
+                    data.children.push(newChild);
+                    console.log(data);
+                    this.updateCloudInfo();
+                })
+            },
+            remove(node, data) {
+                console.log(node,data);
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const parent = node.parent;
+                    const children = parent.data.children || parent.data;
+                    const index = children.findIndex(d => d.id === data.id);
+                    children.splice(index, 1);
+                    this.updateCloudInfo();
+                })
+            },
+
+
+            updateCloudInfo:function(){
+                let content=JSON.stringify(this.data);
+                console.log(content)
+                this.$req.post('/cloud/save_directory',{
+                    jsonpObject:content,
+                    directoryId:sessionStorage.getItem('userId')
+                })
+                    .then(res=>{
+                        if (res.code===0){
+
+                        }
                     })
             },
-            update(e){
-                let formData = new FormData();
-                formData.append('file', e.target.files[0]);
-                let  url = '/cloud/uploadFile';
-                let config = 'multipart/form-data;';
 
-                this.$req.post(url,formData, config).then(function (response) {
+            getCloudInfo:function(tab){
+                if(tab.label=="我的云盘"){
+                    this.$req.post('/cloud/get_directory',{
+                        userId:sessionStorage.getItem('userId')
+                    })
+                        .then(res=>{
+                            if (res.code===0){
+                                this.data=JSON.parse(res.data);
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message:'网盘资源获取失败！'
+                                });
+                            }
+                        })
+                }
+
+            },
+
+
+            uploadConfig: function (e) {
+                let formData = new FormData();
+                formData.append('fileName', e.target.files[0]);
+                let  url = '/cloud/uploadFile';
+                let config = 'multipart/form-data; charset=utf-8';
+                this.$req.post(url,formData, config)
+                    .then(function (response) {
+                        console.log(response.data)
+                    })
+            },
+
+            update(event){
+                event.preventDefault();
+                let formData = new FormData();
+                formData.append('fileName', this.file);
+                console.log(formData);
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data;charset=UTF-8'
+                    }
+                };
+                this.$req.post('/cloud/uploadFile',formData)
+                    .then(function (response) {
                     console.log(response.data)
 
                 })
@@ -338,6 +505,14 @@
 </script>
 
 <style scoped>
+    .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
+    }
     .el_main_body{
         margin-top: 20px;
         background-color: white;
