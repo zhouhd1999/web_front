@@ -258,7 +258,8 @@
                     this.data=res.data;
                     this.$message({
                       type: 'success',
-                      message:this.data.userNickname + '  欢迎您!'
+                      message:this.data.userNickname + '  欢迎您!',
+
                     });
                     this.outVisible=false;
                     this.WelcomeBtn=true;
@@ -267,6 +268,8 @@
                     sessionStorage.setItem('userAccount',this.data.userAccount);
                     sessionStorage.setItem('userPermission',this.data.userPermission);
                     sessionStorage.setItem('userNickname',this.data.userNickname);
+                    //触发监听
+                    this.resetSetItem('watchStorage', this.value);
                     console.log(sessionStorage);
                   }
                   else {

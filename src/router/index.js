@@ -32,7 +32,7 @@ const routes = [
     children:[ {
       path: '/',
       name: 'Index',
-      component: Index
+     component: Index
     },]
   },
   {
