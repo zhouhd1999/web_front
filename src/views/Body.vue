@@ -18,7 +18,7 @@
                             <el-menu-item index="3-2" @click="goTo('/Body/C')">C/C++</el-menu-item>
                             <el-menu-item index="3-3" @click="goTo('/Body/Python')">Python</el-menu-item>
                         </el-submenu>
-                        <el-menu-item index="4">福利专区</el-menu-item>
+                        <el-menu-item index="4" @click="goTo('/Body/123')">福利专区</el-menu-item>
                         <el-menu-item index="5">关于博主</el-menu-item>
                         <el-menu-item index="6" @click="goTo('/Body/LeaveMessage')">给我留言</el-menu-item>
                         <el-menu-item index="7" @click="goTo('/Body/Sponsorship')">赞助作者</el-menu-item>
