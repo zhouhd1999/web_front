@@ -13,7 +13,6 @@ import Person from "../views/Person";
 import Body from "../views/Body";
 import Article_edit from "../views/Article_edit";
 import Article from "../views/Article";
-import aaa from "../views/aaa/aaa"
 
 Vue.use(VueRouter);
 
@@ -68,11 +67,6 @@ const routes = [
         path:'C',
         name:'C',
         component:C,
-      },
-      {
-        path:'aaa',
-        name:'aaa',
-        component:aaa,
       },
       {
         path:'Python',
