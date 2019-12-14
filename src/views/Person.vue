@@ -115,8 +115,18 @@
                                 <h3>我的网盘</h3>
                             </div>
                             <el-divider></el-divider>
-                            <el-button type="text" @click="new_file">新建文件夹</el-button>
-                            <el-button type="text" @click="delete_file">删除</el-button>
+                            <el-button type="small" @click="new_file">新建文件夹</el-button>
+                            <el-button type="small" icon="el-icon-delete" @click="delete_file">删除</el-button>
+                            <el-button size="small" style="float: right" icon="el-icon-download">下载</el-button>
+                            <el-upload
+                                    style="float: right"
+                                    action="http://127.0.0.1:8081/cloud/uploadFile"
+                                    :limit="99"
+                                    :show-file-list="false"
+                                    :before-upload="before_upload"
+                                    :on-success="submit_file_success">
+                                <el-button size="small"  icon="el-icon-upload2">上传</el-button>
+                            </el-upload>
                             <div class="block">
                                 <el-tree
                                         :data="data"
@@ -134,86 +144,7 @@
                                 </el-tree>
                             </div>
                         </div>
-                        <el-button @click="jsontest">123</el-button>
-<!--                        <el-button @click="test1">网盘测试按钮1</el-button>-->
-<!--                        <input id="file" name="file" type="file" @change="getFile($event)"/>-->
-<!--                        <el-button @click="update">上传</el-button>-->
-<!--                        <input type="file" ref="myfile">-->
-<!--                        <el-button @click="importData" type="success" size="mini" icon="el-icon-upload2">导入数据</el-button>-->
-<!--                        <el-upload-->
-<!--                                class="upload-demo"-->
-<!--                                action="/cloud/uploadFile"-->
-<!--                                :on-preview="handlePreview"-->
-<!--                                :on-remove="handleRemove"-->
-<!--                                :before-remove="beforeRemove"-->
-<!--                                multiple-->
-<!--                                :limit="3"-->
-<!--                                :on-exceed="handleExceed"-->
-<!--                                :file-list="fileList">-->
-<!--                            <el-button size="small" type="primary">点击上传</el-button>-->
-<!--                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-<!--                        </el-upload>-->
-<!--                        <form>-->
-<!--                            <input type="file" @change="getFile($event)">-->
-<!--                            <button class="button button-primary button-pill button-small" @click="update($event)">提交</button>-->
-<!--                        </form>-->
-<!--                        <div id="uploadDiv">-->
-<!--                            <input type="file" value="" id="file" @change="uploadConfig" name="file">-->
-<!--                        </div>-->
-<!--                        <form method="post"   enctype="multipart/form-data">-->
-<!--                            <input type="file" id="addForm" class="addForm" name="fileName" @change="getFile"><br>-->
-<!--&lt;!&ndash;                            <input type="submit" value="上传视频"/>&ndash;&gt;-->
-<!--                            <el-button @click="update">11</el-button>-->
-<!--                        </form>-->
-<!--                        <input class="file" type="file" title="请选择文件" value="请选择文件" @change="getFile">-->
-<!--                        <button class="submit" @click="submit1">提交</button>-->
-                        <!--                        <el-button @click="jsontest">211</el-button>-->
-<!--                        <el-upload-->
-<!--                                style="display: inline"-->
-<!--                                :show-file-list="false"-->
-<!--                                :on-success="onSuccess"-->
-<!--                                :on-error="onError"-->
-<!--                                :before-upload="beforeUpload"-->
-<!--                                action="/cloud/uploadFile">-->
-<!--                            <el-button size="mini" type="success" >123</el-button>-->
-<!--                        </el-upload>-->
-<!--                        <el-dialog >-->
-<!--                            <div class="add-file-right" style="height:70px;margin-left:100px;margin-top:15px;">-->
-<!--                                <div class="add-file-right-img" style="margin-left:70px;">上传文件：</div>-->
-<!--                                <input type="file" ref="clearFile" @change="getFile($event)" multiple="multiplt" class="add-file-right-input" style="margin-left:70px;" accept=".docx,.doc,.pdf">-->
-<!--                                <span class="add-file-right-more">支持扩展名：.doc .docx .pdf </span>-->
-<!--                            </div>-->
-<!--                            <div class="add-file-list">-->
-<!--                                <ul>-->
-<!--                                    <li v-for="(item, index) in addArr" :key="index"><a >{{item.name}}</a></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            <div slot="footer" class="dialog-footer">-->
-<!--                                <el-button type="primary" @click="submitAddFile" size="small">开始上传</el-button>-->
-<!--                            </div>-->
-<!--                        </el-dialog>-->
-<!--                        <el-upload-->
-<!--                                class="upload-demo"-->
-<!--                                :action="doupload()"-->
-<!--                                :before-upload="before_Upload"-->
-<!--                                ref="newupload"-->
-<!--                                multiple-->
-<!--                        >-->
-<!--                            <el-button style="background-color:#F95714;border-radius:4px;width:220px;height:40px;color:#fff" >上传附件</el-button>-->
-<!--                            &lt;!&ndash; <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> &ndash;&gt;-->
-<!--                        </el-upload>-->
-                        <!--选择文件-->
-                            <el-upload
-                                    action="http://127.0.0.1:8081/cloud/uploadFile"
-                                    :limit="1"
-                                    :on-remove="handleRemove">
-                                <el-button size="small" type="primary">选取模板</el-button>
-                                <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>-->
-                                <div slot="tip" class="el-upload__tip">只能上传pdf文件，且不超过2M</div>
-                            </el-upload>
-                            <el-button v-on:click="uploadDialogFormVisible = false">关闭</el-button>
-                            <!--<el-button type="primary" v-on:click="uploadDialogFormVisible = false">上传</el-button>-->
-                            <el-button type="primary" @click="submitUpload">上传到服务器</el-button>
+
                     </el-tab-pane>
                 </el-tabs>
             </el-main>
@@ -248,7 +179,7 @@
                 </el-form-item>
                 <el-form-item style="margin-left: 165px">
                     <el-button type="info" @click="theVisible=false">取消</el-button>
-                    <el-button type="primary" @click="submit('ruleForm')">提交</el-button>
+                    <el-button type="primary" @click="submit_info('ruleForm')">提交</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -256,8 +187,7 @@
 </template>
 
 <script>
-    var formData = new FormData();
-    let id = 1000;
+    let id = 100;
     import aixin from '@/assets/爱心.png'
     import tubiao from '@/assets/标签.png'
     import hhh from '@/assets/img-3.png'
@@ -313,6 +243,7 @@
                 ID: "",
                 nickname: "",
                 age: "",
+                fileName:'',
                 file: '',
                 tell: "",
                 node: '',
@@ -373,104 +304,21 @@
             };
         },
         methods: {
-            submitUpload: function () {
-
-                let formData = new FormData();
-                this.fileList.forEach(function (file) {
-                    console.log(file);
-                    formData.append("files", file);
-                });
-                let config = {
-                    'Content-Type': 'multipart/form-data'
-                };
-                formData.append("area", this.area);
-                let var_this = this;
-                this.$req.post('/cloud/uploadFile', formData, config)
-                    .then(function (response) {
-                        if (response.data.status == 1) {
-                            var_this.$message({
-                                message: `${var_this.area}区域${var_this.fileList.length}个文件(上传/更新)成功`,
-                                type: 'success'
-                            });
-                        } else {
-                            var_this.$message({
-                                message: response.data.msg,
-                                type: 'error'
-                            });
-                        }
-                    }).catch(function (error) {
-                    console.log(error);
-                })
-            },
-            jsontest: function () {
-                console.log((JSON.stringify(this.data)));
-            },
-
-            getFile(event) {
-                this.file = event.target.files[0];
-
-            },
-            submitAddFile() {
-                if (0 == this.addArr.length) {
-                    this.$message({
-                        type: 'info',
-                        message: '请选择要上传的文件'
-                    });
-                    return;
-                }
-
-                var formData = new FormData();
-                formData.append('num', this.addType);
-                formData.append('linkId', this.addId);
-                formData.append('fileName', this.addFileName);
-                for (var i = 0; i < this.addArr.length; i++) {
-                    formData.append('fileUpload', this.addArr[i]);
-                }
-                let config = {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': this.token
-                    }
-                };
-                this.$req.post('/cloud/uploadFile', formData, config)
-                    .then((response) => {
-                        if (response.data.info == "success") {
-                            this.$message({
-                                type: 'success',
-                                message: '附件上传成功!'
-                            });
-                        }
-                    })
-            },
-
-            doupload() {
-                return 12312; // 一次接口
-            },
-            //上传
-            before_Upload(file) {
-                //  表单提交方式
-                let FormDatas = new FormData()
-                FormDatas.append('fileName', file)
-                FormDatas.append('bizTable', 'candidate')  //其他参数
-                FormDatas.append('bizId', '6')//候选人id<===========!
-                console.log(FormDatas)
-                this.$req.post({
-                    url: '/cloud/uploadFile',   //  二次接口
-                    headers: headers('multipart/form-data'),
-                    data: FormDatas
-                }).then(function (res) {
-                    if (res.data.code == 10000) {
-                        that.$message.success(res.data.msg);
-                    } else {
-                        that.$message.error(res.data.msg);
-                    }
-                })
-            },
-
 
             //树形控件
             new_file: function () {
-                this.append(this.node_data);
+                if(this.node_data ==''||this.node==''){
+                    this.$message({
+                        type: 'error',
+                        message:'请先选择新建文件夹的路径！'
+                    });
+                }else if (this.node.children=='undefine'){
+
+                }
+                else{
+                    this.append(this.node_data);
+                }
+
             },
             delete_file: function () {
                 if (this.node_data.id === 1) {
@@ -479,15 +327,23 @@
                         message: '根目录禁止删除!'
                     });
                 } else {
-                    this.remove(this.node, this.node_data);
+                    if(this.node_data ==''||this.node==''){
+                        this.$message({
+                            type: 'error',
+                            message:'请先选择新建文件夹的路径！'
+                        });
+                    }
+                    else{
+                        this.remove(this.node, this.node_data);
+                    }
                 }
             },
             handleNodeClick(data, node) {
-
                 this.node_data = data;
                 this.node = node;
             },
             append(data) {
+                console.log(data);
                 this.$prompt('请输入文件名', '新建文件夹', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -520,7 +376,6 @@
                     this.updateCloudInfo();
                 })
             },
-
 
             updateCloudInfo: function () {
                 let content = JSON.stringify(this.data);
@@ -555,98 +410,37 @@
 
             },
 
+            submit_file_success:function(){
 
-            uploadConfig: function (e) {
-                var formData = new FormData();
-                formData.append('fileName', e.target.files[0]);
-                var url = '/cloud/uploadFile';
-                var config = 'multipart/form-data; charset=utf-8';
-                this.$req.post(url, {
-                    data: formData
-                })
-                    .then(function (response) {
-                        console.log(response.data)
-                    })
-            },
-
-            update: function (event) {
-                // event.preventDefault();
-                // let formData = new FormData();
-                // formData.append('fileName', this.file);
-                // console.log(formData.get('fileName'))
-                // let config = {
-                //     headers: {
-                //         'Content-Type': 'multipart/form-data;charset=UTF-8',
+                const newChild={id:id++, label: this.fileName,};
+                this.node.data.children.push(newChild);
+                console.log(this.data);
                 //
-                //     }
-                // };
-                // this.$req.post('http://127.0.0.1:8081/cloud/uploadFile',{
-                //     data:formData,
-                //     headers: {
-                //         'Content-Type': 'multipart/form-data',
-                //         'Access-Control-Allow-Origin': 'http://127.0.0.1:8080',
-                //         'http-equiv':"Content-Type"
-                //         //这里是为了解决跨域问题，但是博主并没有用这种方式解决。后面会给出解决方案
-                //     }
-                // })
-                //     .then(function (response) {
-                //     console.log(response.data)
-                //
-                // })
-                // var formData = new FormData();
-                // formData.append('fileName',this.file)
-                // this.$req.post('/cloud/uploadFile', formData, {
-                //
-                // }).then(function (response) {
-                //     console.log(response);
-                // })
-                formData.append('file', this.file) // 'file' 这个名字要和后台获取文件的名字一样;
-                //'userfile'是formData这个对象的键名
-                this.$req.post({
-                    url: '/ensure/uploadwork',   //****: 你的ip地址
-                    data: formData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        // 'Access-Control-Allow-Origin': 'http://127.0.0.1:8080'
-                        //这里是为了解决跨域问题，但是博主并没有用这种方式解决。后面会给出解决方案
-                    }
-                }).then((res) => {
-                    console.log(res.data);
-                }) // 发送请求
-
-
-
-
-    },
-
-            submit1: function() {
-                formData.append('file', this.file) // 'file' 这个名字要和后台获取文件的名字一样;
-                formData.append('user','this.name')
-
-                //'userfile'是formData这个对象的键名
-                this.$req.post('/cloud/uploadFile',{
-                    //****: 你的ip地址
-                    data: formData,
-                    processData: false,
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        // 'Access-Control-Allow-Origin': 'http://127.0.0.1:8080'
-                        //这里是为了解决跨域问题，但是博主并没有用这种方式解决。后面会给出解决方案
-                    }
-                }).then((res) => {
-                    console.log(res.data);
-                }) // 发送请求
+                // this.node.data.children.push(newChild);
+                // console.log(this.node.data.children)
+                // const newChild = {id: id++, label: 'value', children: []};
+                // if (!data.children) {
+                //     this.$set(data, 'children', []);
+                // }
+                // data.children.push(newChild);
+                // this.$message({
+                //     type: 'success',
+                //     message:'提交成功！'
+                // });
             },
 
-
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+            before_upload:function(file){
+                this.fileName=file.name;
+                if(this.node_data ==''||this.node==''){
+                    this.$message({
+                        type: 'error',
+                        message:'请先选择上传路径！'
+                    });
+                    return false;
+                }
             },
-            handlePreview(file) {
-                console.log(file);
-            },
 
-            submit:function(formName){
+            submit_info:function(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid){
                         this.$req.post('/information/update_information',{

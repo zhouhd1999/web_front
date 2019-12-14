@@ -12,7 +12,7 @@ import LeaveMessage from "../views/LeaveMessage/LeaveMessage";
 import Person from "../views/Person";
 import Body from "../views/Body";
 import Article_edit from "../views/Article_edit";
-import Article from "../views/Article";
+import Article from "../views/Article"
 
 Vue.use(VueRouter);
 
@@ -31,7 +31,7 @@ const routes = [
     children:[ {
       path: '/',
       name: 'Index',
-     component: Index
+      component: Index
     },]
   },
   {
