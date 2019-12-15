@@ -53,6 +53,11 @@
               <el-form-item label="确认密码" prop="checkPass">
                 <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
               </el-form-item>
+              <el-form-item label="验证码" prop="checkGraph">
+                <el-input  placeholder="请输入验证码" class="yanzhengma_input"  v-model="ruleForm.checkGraph" autocomplete="off"/>
+                <input type="button"  @click="createCode"  class="verification" v-model="Graph"/>
+
+              </el-form-item>
 <!--              <el-form-item label="手机号码" prop="age">-->
 <!--                <el-input v-model.number="ruleForm.age"></el-input>-->
 <!--              </el-form-item>-->
@@ -138,13 +143,27 @@
           callback();
         }
       };
+
+      let checkGraph = (rule, value, callback) => {
+        if(value !== this.checkCode){
+          callback(new Error('验证码错误'));
+        }else{
+          callback();
+        }
+      };
+
+
       return{
+        Graph:'',
         ruleForm: {
           acct:'',
           pass: '',
           checkPass: '',
+          checkGraph:'',
+
           //age: ''
         },
+
         rules: {
           acct: [
             { validator: checkAccount, trigger:'blur'}
@@ -158,6 +177,10 @@
           // age: [
           //   { validator: checkAge, trigger: 'blur' }
           // ]
+
+          checkGraph:[
+            {validator: checkGraph, trigger:'blur'}
+          ],
         },
         ruleForm1: {
           pass: '',
@@ -243,12 +266,28 @@
             });
           }
         });
-
       },
-
+      createCode(){
+        //先清空验证码的输入
+        this.code = "";
+        this.Graph = "";
+        //验证码的长度
+        var codeLength = 4;
+        //随机数
+        var random = new Array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        for(var i = 0; i < codeLength; i++) {
+          //取得随机数的索引（0~35）
+          var index = Math.floor(Math.random()*36);
+          //根据索引取得随机数加到code上
+          this.code += random[index];
+        }
+        //把code值赋给验证码
+        this.Graph = this.code;
+      },
       //注册按钮
       registered:function(){
         this.innerVisible=true;
+        this.createCode();
       },
       //登录
       Login:function(formName){
@@ -285,7 +324,7 @@
             }else {
               this.$message({
                 type: 'error',
-                message:'请先完善信息'
+                message:'请填写正确信息'
               });
             }
         })
@@ -347,5 +386,34 @@
   .ziti{
     position: relative;
     top: -26px;
+  }
+
+  .yanzhengma_input{
+    font-family: 'Exo 2', sans-serif;
+    border: 1px solid #fff;
+    color: #fff;
+    outline: none;
+    border-radius: 12px;
+    letter-spacing: 1px;
+    font-size: 17px;
+    font-weight: normal;
+    background-color: rgba(82, 56, 76, 0.15);
+    padding: 5px 0 5px 10px;
+    margin-left: 30px;
+    height: 30px;
+    margin-top: 25px;
+    border: 1px solid #e6e6e6;
+  }
+  .verification{
+    border-radius: 12px;
+    width:100px;
+    letter-spacing:5px;
+    margin-left: 50px;
+    height: 40px;
+    transform: translate(-15px,0);
+  }
+  .captcha{
+    height: 50px;
+    text-align: justify;
   }
 </style>

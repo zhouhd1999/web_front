@@ -147,11 +147,11 @@
 <script>
     import posters1 from '@/assets/t1.png'
     import posters2 from '@/assets/t2.png'
-    import posters4 from '@/assets/JayChou.jpg'
+    import posters4 from '@/assets/JayChou.png'
     import music1 from '@/assets/nezha.mp3'
     import music2 from '@/assets/yeshanghai.mp3'
     import music3 from '@/assets/shanlushibawan.mp3'
-    import music4 from '@/assets/JayChou.flac'
+    import music4 from '@/assets/JayChou.mP3'
     export default {
         name: "Body",
         data(){
