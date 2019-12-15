@@ -151,7 +151,7 @@
     import music1 from '@/assets/nezha.mp3'
     import music2 from '@/assets/yeshanghai.mp3'
     import music3 from '@/assets/shanlushibawan.mp3'
-    import music4 from '@/assets/JayChou.mP3'
+    import music4 from '@/assets/JayChou.mp3'
     export default {
         name: "Body",
         data(){
@@ -193,14 +193,7 @@
                         url:"#",
                         favorited:false
                     },
-                    {
-                        name:"我是如此相信",
-                        artist:"周杰伦",
-                        cover:posters4,
-                        source:music4,
-                        url:"#",
-                        favorited:false
-                    },
+
 
                 ],
                 currentTrack: null,

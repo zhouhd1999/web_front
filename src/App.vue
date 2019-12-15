@@ -230,6 +230,8 @@
 
       //注册
       submit:function(formName){
+        alert(this.ruleForm.checkGraph);
+        alert(this.Graph);
         this.$refs[formName].validate((valid) => {
           if (valid){
             this.$req.post('/user/insert_user',{
