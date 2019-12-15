@@ -1,7 +1,6 @@
 <template>
     <div>
-
-        <div style="margin-top: 20px" >
+        <div style="margin-top: 20px">
             <div v-for="(item,index) in article" class="content">
                 <div class="top">
                     <div style="font-size: 20px;position: relative;top: -18px;margin-left: 80px">
@@ -18,7 +17,7 @@
                     <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{userNickname}}</span>
                     <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
                     <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                    <span style="color: #f78585;" @click="like2(item,index)">{{item.articleLike}}个喜欢</span>
+                    <span style="color: #f78585;" >{{item.articleLike}}个喜欢</span>
                 </div>
             </div>
         </div>
@@ -41,6 +40,9 @@
             }
         },
         methods:{
+            ShowLogin:function(){
+                this.outVisible=true;
+            },
             open_article:function (item) {
                 this.$router.push({
                     name:'Article',
@@ -49,21 +51,21 @@
                     }
                 });
             },
+
             get_article:function () {
-                this.$req.post('/article/get_articleByUserId',{
-                    userId:sessionStorage.getItem('userId'),
-                })
-                    .then(res=>{
-                        if(res.code===0){
-                            this.article=res.data;
-                            //console.log(this.article);
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message:'文章获取失败！'
-                            });
-                        }
+                    this.$req.post('/article/get_articleByUserId', {
+                        userId: 2,
                     })
+                        .then(res => {
+                            if (res.code === 0) {
+                                this.article = res.data;
+                            } else {
+                                this.$message({
+                                    type: 'error',
+                                    message: '文章获取失败！'
+                                });
+                            }
+                        })
             },
 
         },

@@ -521,7 +521,7 @@
         },
         computed:{
             idPlaceholder:function () {
-                return this.ID+"                          ID是唯一标识，不可修改！";
+                return this.ID+"                  ID是唯一标识，不可修改！";
             }
         },
         created() {

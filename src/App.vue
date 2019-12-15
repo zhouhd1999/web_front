@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+
       <el-container>
         <el-header class="header" height="80px">
           <div><p class="ziti">OUR WEBSITE</p></div>
@@ -14,7 +15,10 @@
               <el-dropdown-item style="text-align: center" command="cancellation">注  销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <div style="float: right;font-size: 20px;position: relative;top: -100px" v-show="LoginBtn"><i class="el-icon-switch-button"></i><el-button type="text" style="margin-left: 3px;font-size: 15px;margin-right: 10px;color: #eee" @click="ShowLogin">登录</el-button></div>
+          <div style="float: right;font-size: 20px;position: relative;top: -100px" v-show="LoginBtn">
+              <i class="el-icon-switch-button"></i>
+              <el-button type="text" style="margin-left: 3px;font-size: 15px;margin-right: 10px;color: #eee" @click="ShowLogin">登录</el-button>
+          </div>
         </el-header>
         <el-container>
           <router-view/>
@@ -176,6 +180,7 @@
         data:[]
       };
     },
+
     methods:{
 
       register_cancel:function(){
@@ -268,8 +273,6 @@
                     sessionStorage.setItem('userAccount',this.data.userAccount);
                     sessionStorage.setItem('userPermission',this.data.userPermission);
                     sessionStorage.setItem('userNickname',this.data.userNickname);
-                    //触发监听
-                    this.resetSetItem('watchStorage', this.value);
                     console.log(sessionStorage);
                   }
                   else {

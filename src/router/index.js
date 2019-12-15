@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../views/Index/Index.vue'
-import PersonalEssay from '../views/Personal/PersonalEssay'
 import PersonalDiary from '../views/Personal/PersonalDiary'
 import PersonalShow from "../views/Personal/PersonalShow";
 import Java from "../views/Technology/Java";
@@ -38,11 +37,7 @@ const routes = [
     path:'/Body',
     name:'Body',
     component:Body,
-    children:[{
-        path:'PersonalEssay',
-        name:'PersonalEssay',
-        component:PersonalEssay,
-      },
+    children:[
       {
         path: '/',
         name: 'Index',
