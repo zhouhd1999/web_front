@@ -1,7 +1,15 @@
 <template>
     <div>
         <el-container>
-            <el-aside width="200px"></el-aside>
+            <el-aside width="240px">
+                <div style="position: fixed;left: 140px;bottom: 20px">
+                    <div class="left">
+                        <el-tooltip class="item" effect="dark" content="我要投稿" placement="left-start">
+                            <el-button icon="el-icon-circle-plus-outline" style="background-color:rgba(0,0,0,0);border: 0;font-size: 60px" circle @click="new_article('/Article_edit')"></el-button>
+                        </el-tooltip>
+                    </div>
+                </div>
+            </el-aside>
             <el-container style="padding: 0" class="nav-main">
                 <el-header style="width: 1019.2px">
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" >
@@ -206,6 +214,16 @@
                 this.$router.push(index);
             },
 
+            new_article:function(index) {
+                if (sessionStorage.getItem('userId')==undefined){
+                    this.$message({
+                        type: 'error',
+                        message: '请先登录!'
+                    });
+                }  else{
+                    this.$router.push(index);
+                }
+            },
 
             play() {
                 if (this.audio.paused) {
@@ -333,6 +351,13 @@
 
 <style scoped>
 
+    .left {
+        float: left;
+        width: 60px;
+    }
+    .item {
+        margin: 4px;
+    }
 
     .wrapper{
 

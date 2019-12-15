@@ -4,7 +4,7 @@
             <el-aside width="250px">
             </el-aside>
             <el-main class="el_main_body">
-                <el-tabs :tab-position="'left'" style="height: 100%" @tab-click="getCloudInfo">
+                <el-tabs :tab-position="'left'" style="height: 100%" @tab-click="getInfo">
                     <el-tab-pane label="个人资料" style="height: 480px">
                         <div style="padding: 0 32px 30px">
                             <div style="font-size: 20px">
@@ -16,15 +16,13 @@
                                     <el-col :span="4">
                                         <div style="margin-left: 10px">
                                             <el-avatar :size="100" :src="circleUrl"></el-avatar>
-<!--                                            <el-upload-->
-<!--                                                    class="upload-demo"-->
-<!--                                                    :action=url-->
-<!--                                                    :on-preview="handlePreview"-->
-<!--                                                    :on-remove="handleRemove"-->
-<!--                                                    list-type="picture">-->
-<!--                                                <el-button type="text" style="margin-left: 20px">修改头像</el-button>-->
-<!--                                                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-<!--                                            </el-upload>-->
+                                            <el-upload
+                                                    class="upload-demo"
+                                                    action="http://127.0.0.1:8081/cloud/uploadFile"
+                                                    list-type="picture">
+                                                <el-button type="text" style="margin-left: 20px">修改头像</el-button>
+                                                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                            </el-upload>
                                         </div>
                                     </el-col>
                                     <el-col :span="16">
@@ -51,25 +49,25 @@
                             </div>
                             <el-button style="float: right;position: relative;top: -60px" @click="new_article">新建文章</el-button>
                             <el-divider></el-divider>
-                            <div v-for="(item,index) in article" class="content">
+                            <div v-for="(item,index) in my_article" class="content">
                                 <div class="top">
                                     <img :src="tubiao" style="height: 20px;width: 20px" />
-                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tag}}</span>
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
                                     <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                                        <el-button type="text" style="font-size: 20px">{{item.title}}</el-button>
+                                        <el-button type="text" style="font-size: 20px">{{item.articleName}}</el-button>
                                     </div>
                                 </div>
                                 <div class="mid">
                                     <el-row>
                                         <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.introduction}}<br/></span></div></el-col>
+                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
                                     </el-row>
                                 </div>
                                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.author}}</span>
-                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.date}}</span>
+                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
                                     <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                                    <span style="color: #f78585;">{{item.like}}个喜欢</span>
+                                    <span style="color: #f78585;">{{item.articleLike}}个喜欢</span>
 
                                 </div>
                                 <el-divider></el-divider>
@@ -83,7 +81,7 @@
                                 <h3>我的喜欢</h3>
                             </div>
                             <el-divider></el-divider>
-                            <div v-for="(item,index) in article" class="content">
+                            <div v-for="(item,index) in my_love_article" class="content">
                                 <div class="top">
                                     <img :src="tubiao" style="height: 20px;width: 20px" />
                                     <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tag}}</span>
@@ -117,16 +115,20 @@
                             <el-divider></el-divider>
                             <el-button type="small" @click="new_file">新建文件夹</el-button>
                             <el-button type="small" icon="el-icon-delete" @click="delete_file">删除</el-button>
-                            <el-button size="small" style="float: right" icon="el-icon-download">下载</el-button>
+                            <el-button size="small" style="float: right" icon="el-icon-download" @click="downLoad">下载</el-button>
+
+                            <a :href="'http://127.0.0.1:8081/cloud/download?name='+fileName" id="downLoad" v-show="false"> 下载文件 </a>
                             <el-upload
+
                                     style="float: right"
                                     action="http://127.0.0.1:8081/cloud/uploadFile"
                                     :limit="99"
                                     :show-file-list="false"
                                     :before-upload="before_upload"
                                     :on-success="submit_file_success">
-                                <el-button size="small"  icon="el-icon-upload2">上传</el-button>
+                                <el-button size="small"  icon="el-icon-upload2" >上传</el-button>
                             </el-upload>
+
                             <div class="block">
                                 <el-tree
                                         :data="data"
@@ -151,7 +153,7 @@
         </el-container>
 
 
-<!--        修改个人资料-->
+        <!--        修改个人资料-->
         <el-dialog
                 width="30%"
                 title="修改资料"
@@ -187,7 +189,7 @@
 </template>
 
 <script>
-    let id = 100;
+    let id = 1;
     import aixin from '@/assets/爱心.png'
     import tubiao from '@/assets/标签.png'
     import hhh from '@/assets/img-3.png'
@@ -217,7 +219,7 @@
                 }
             };
             return {
-                data: [],
+                data: [{label:"我的网盘", id:1,children: []}],
                 ruleForm: {
                     nickname: '',
                     age: '',
@@ -233,8 +235,6 @@
                         {validator: checkNumber, trigger: 'blur'}
                     ],
                 },
-                fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-
                 aixin: aixin,
                 tubiao: tubiao,
                 hhh: hhh,
@@ -250,70 +250,24 @@
                 node_data: '',
                 profession: "",
                 introduction: "",
-                article: [{
-                    tag: 'Python',
-                    title: 'sklearn贝叶斯分类器的案例',
-                    img: '123',
-                    introduction: '贝叶斯分类器的原理比较简单，可以自己去百度了解原理，这篇文章就是讲一讲贝叶斯分类器的实际应用案例。案例：研究期末考试前一周的行为（假设有三种：1.打游戏 2.逛街 3.学习）对于期末开考试的影响（就是是否挂科）。首先要有一个样本库，没办法，只能自己去创建了，我们就按照这个形式来创建样本库，形...',
-                    date: '2019/11/29',
-                    author: '123',
-                    link: '132323132',
-                    like: 5
-                },
-                    {
-                        tag: 'Java',
-                        title: 'Java世界最常用的工具类库',
-                        img: '123',
-                        introduction: 'jdk1.8之前，日期操作类常用的只有java.util.Date和java.util.Calendar，但是这2个类的易用性实在太差了，SimpleDateFormat不是线程安全的 。这就逼迫用户去选择第三方的日期操作类，Joda Time就是其中的佼佼者。后来Java自身也意识到了这个问题，于是jdk1.8大量借鉴了Joda Time的理念，推出了新的日期api，...',
-                        date: '2019/11/29',
-                        author: '123',
-                        link: '132323132',
-                        like: 5
-                    },
-                    {
-                        tag: 'Python',
-                        title: '23qwewqeqweqwqweqweqwweqweqweqwqwe123',
-                        img: '123',
-                        troduction: '5464643qweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee33333eeeee6456465',
-                        date: '2019/11/29',
-                        author: '123',
-                        link: '132323132',
-                        like: 5
-                    },
-                    {
-                        tag: 'C',
-                        title: '231qweqweqewweq23',
-                        img: '123',
-                        introduction: '5464646456465',
-                        date: '2019/11/29',
-                        author: '123',
-                        link: '132323132',
-                        like: 5
-                    },
-                    {
-                        tag: 'Python',
-                        title: '23123',
-                        img: '123',
-                        introduction: '5464646456465',
-                        date: '2019/11/29',
-                        author: '123',
-                        link: '132323132',
-                        like: 5
-                    }]
-
+                my_article: [],
+                my_love_article:[]
             };
         },
         methods: {
 
             //树形控件
             new_file: function () {
-                if(this.node_data ==''||this.node==''){
+                if(this.node_data ==''||this.node ==''){
                     this.$message({
                         type: 'error',
                         message:'请先选择新建文件夹的路径！'
                     });
-                }else if (this.node.children=='undefine'){
-
+                }else if (this.node.data.children===undefined){
+                    this.$message({
+                        type: 'error',
+                        message:'此目录不允许新建！'
+                    });
                 }
                 else{
                     this.append(this.node_data);
@@ -327,7 +281,7 @@
                         message: '根目录禁止删除!'
                     });
                 } else {
-                    if(this.node_data ==''||this.node==''){
+                    if(this.node_data ===''||this.node===''){
                         this.$message({
                             type: 'error',
                             message:'请先选择新建文件夹的路径！'
@@ -339,9 +293,11 @@
                 }
             },
             handleNodeClick(data, node) {
+                this.fileName=node.data.label;
                 this.node_data = data;
                 this.node = node;
             },
+            //新建文件夹
             append(data) {
                 console.log(data);
                 this.$prompt('请输入文件名', '新建文件夹', {
@@ -379,10 +335,10 @@
 
             updateCloudInfo: function () {
                 let content = JSON.stringify(this.data);
-                console.log(content)
                 this.$req.post('/cloud/save_directory', {
-                    jsonpObject: content,
-                    directoryId: sessionStorage.getItem('userId')
+                    dirContent: content,
+                    directoryId: sessionStorage.getItem('userId'),
+                    countId:id,
                 })
                     .then(res => {
                         if (res.code === 0) {
@@ -391,18 +347,39 @@
                     })
             },
 
-            getCloudInfo: function (tab) {
+            getInfo: function (tab) {
                 if (tab.label == "我的云盘") {
                     this.$req.post('/cloud/get_directory', {
                         userId: sessionStorage.getItem('userId')
                     })
                         .then(res => {
+                            console.log(res);
                             if (res.code === 0) {
-                                this.data = JSON.parse(res.data);
+                                this.data = JSON.parse(res.data.directoryContent);
+                                console.log(this.data);
+                                id=res.data.countId;
                             } else {
+
+                            }
+                        })
+                }
+
+                if (tab.label == "我的喜欢") {
+
+                }
+
+                if (tab.label == "我的文章") {
+                    this.$req.post('/article/get_articleByUserId',{
+                        userId:sessionStorage.getItem('userId')
+                    })
+                        .then(res=>{
+                            if (res.code===0){
+                                this.my_article=res.data;
+                            }
+                            else{
                                 this.$message({
                                     type: 'error',
-                                    message: '网盘资源获取失败！'
+                                    message: '我的文章失败！'
                                 });
                             }
                         })
@@ -413,31 +390,73 @@
             submit_file_success:function(){
 
                 const newChild={id:id++, label: this.fileName,};
+                console.log(id);
                 this.node.data.children.push(newChild);
-                console.log(this.data);
-                //
-                // this.node.data.children.push(newChild);
-                // console.log(this.node.data.children)
-                // const newChild = {id: id++, label: 'value', children: []};
-                // if (!data.children) {
-                //     this.$set(data, 'children', []);
-                // }
-                // data.children.push(newChild);
-                // this.$message({
-                //     type: 'success',
-                //     message:'提交成功！'
-                // });
+                this.updateCloudInfo();
+                this.$message({
+                    type: 'success',
+                    message:'提交成功！'
+                });
             },
 
             before_upload:function(file){
+                console.log(this.node);
                 this.fileName=file.name;
-                if(this.node_data ==''||this.node==''){
+                if(this.node_data ===''||this.node===''){
                     this.$message({
                         type: 'error',
                         message:'请先选择上传路径！'
                     });
                     return false;
+                }else if (this.node.data.children===undefined){
+                    this.$message({
+                        type: 'error',
+                        message:'此目录不允许上传文件！'
+                    });
+                    return false;
                 }
+            },
+
+            upload:function(){
+
+            },
+
+            downLoad:function(){
+                if(this.node.data.children!==undefined){
+                    this.$message({
+                        type: 'error',
+                        message:'文件夹不允许下载！'
+                    });
+                }else{
+                    document.getElementById("downLoad").click();
+                }
+                // this.$req.get('/cloud/download',{
+                //     name:this.node.data.label
+                // },
+                //     {responseType:'arraybuffer'})
+                //     .then(res=>{
+                //         let blob = new Blob([res.data], {
+                //             //type: 'application/vnd.ms-excel'
+                //         });
+                //         let objectUrl = URL.createObjectURL(blob);
+                //         window.location.href = objectUrl;
+                //         // console.log(blob)
+                //         // let fileName = this.node.data.label
+                //         // if (window.navigator.msSaveOrOpenBlob) {
+                //         //     // console.log(2)
+                //         //     navigator.msSaveBlob(blob, fileName)
+                //         // } else {
+                //         //     // console.log(3)
+                //         //     var link = document.createElement('a')
+                //         //     link.href = window.URL.createObjectURL(blob)
+                //         //     link.download = fileName
+                //         //     link.click()
+                //         //     //释放内存
+                //         //     window.URL.revokeObjectURL(link.href)
+                //         //}
+                //         })
+
+
             },
 
             submit_info:function(formName){
@@ -453,32 +472,32 @@
                             infoIntroduction:this.ruleForm.introduction
                         })
                             .then(res=>{
-                               if (res.code===0) {
-                                   this.$req.post('/user/update_user',{
-                                       userId:sessionStorage.getItem('userId'),
-                                       userNickname:this.ruleForm.nickname,
-                                   })
-                                       .then(ret=>{
-                                           if (ret.code===0){
-                                               this.$message({
-                                                   type: 'success',
-                                                   message:'修改成功！'
-                                               });
-                                               this.theVisible=false;
-                                               this.getUserMessage();
-                                           }else{
-                                               this.$message({
-                                                   type: 'error',
-                                                   message:'修改失败！'
-                                               });
-                                           }
-                                       })
-                               }else{
-                                   this.$message({
-                                       type: 'error',
-                                       message:'修改失败！'
-                                   });
-                               }
+                                if (res.code===0) {
+                                    this.$req.post('/user/update_user',{
+                                        userId:sessionStorage.getItem('userId'),
+                                        userNickname:this.ruleForm.nickname,
+                                    })
+                                        .then(ret=>{
+                                            if (ret.code===0){
+                                                this.$message({
+                                                    type: 'success',
+                                                    message:'修改成功！'
+                                                });
+                                                this.theVisible=false;
+                                                this.getUserMessage();
+                                            }else{
+                                                this.$message({
+                                                    type: 'error',
+                                                    message:'修改失败！'
+                                                });
+                                            }
+                                        })
+                                }else{
+                                    this.$message({
+                                        type: 'error',
+                                        message:'修改失败！'
+                                    });
+                                }
                             })
                     }else{
                         this.$message({

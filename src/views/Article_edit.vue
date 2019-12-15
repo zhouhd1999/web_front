@@ -63,27 +63,71 @@
             },
 
             submit_article:function(){
-                this.$req.post('/article/insert_article',{
-                    userId:sessionStorage.getItem('userId'),
-                    tagId:this.radio,
-                    articleContent:this.value,
-                    articleName:this.title,
-                    articleDescribe:this.describe,
-                    articleState:1
-                })
-                    .then(res=>{
-                        if (res.code===0){
-                            this.$message({
-                                type: 'info',
-                                message:'已提交到管理员处审核，请耐心等待!'
-                            });
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message:'提交失败，请稍后重试!'
-                            });
-                        }
-                    })
+                if (this.radio===''||this.title===''||this.describe===''||this.value===''){
+                    this.$message({
+                        type: 'info',
+                        message:'请先完善信息!'
+                    });
+                }else{
+                    if (sessionStorage.getItem('userPermission')==='1'){
+                        this.$confirm('确认提交?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(() => {
+                            this.$req.post('/article/insert_article',{
+                                userId:sessionStorage.getItem('userId'),
+                                tagId:this.radio,
+                                articleContent:this.value,
+                                articleName:this.title,
+                                articleDescribe:this.describe,
+                                articleState:1
+                            })
+                                .then(res=>{
+                                    if (res.code===0){
+                                        this.$message({
+                                            type: 'success',
+                                            message:'提交成功!'
+                                        });
+                                    }else{
+                                        this.$message({
+                                            type: 'error',
+                                            message:'提交失败，请稍后重试!'
+                                        });
+                                    }
+                                })
+                        });
+                    }
+                    else{
+                        this.$confirm('点击确定后将提交到管理员出审核, 是否继续?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                        }).then(() => {
+                            this.$req.post('/article/insert_article',{
+                                userId:sessionStorage.getItem('userId'),
+                                tagId:this.radio,
+                                articleContent:this.value,
+                                articleName:this.title,
+                                articleDescribe:this.describe,
+                                articleState:2
+                            })
+                                .then(res=>{
+                                    if (res.code===0){
+                                        this.$message({
+                                            type: 'info',
+                                            message:'已提交到管理员处审核，请耐心等待!'
+                                        });
+                                    }else{
+                                        this.$message({
+                                            type: 'error',
+                                            message:'提交失败，请稍后重试!'
+                                        });
+                                    }
+                                })
+                        });
+                    }
+
+                }
+
             },
 
             handleClose(done) {
