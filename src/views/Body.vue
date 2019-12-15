@@ -147,8 +147,8 @@
 <script>
     import posters1 from '@/assets/t1.png'
     import posters2 from '@/assets/t2.png'
-    import music1 from 'C:/Users/DELL/Music/nezha.mp3'
-    import music2 from 'C:/Users/DELL/Music/yeshanghai.mp3'
+    import music1 from '@/assets/nezha.mp3'
+    import music2 from '@/assets/yeshanghai.mp3'
     export default {
         name: "Body",
         data(){
