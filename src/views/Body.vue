@@ -147,8 +147,11 @@
 <script>
     import posters1 from '@/assets/t1.png'
     import posters2 from '@/assets/t2.png'
+    import posters4 from '@/assets/JayChou.jpg'
     import music1 from '@/assets/nezha.mp3'
     import music2 from '@/assets/yeshanghai.mp3'
+    import music3 from '@/assets/shanlushibawan.mp3'
+    import music4 from '@/assets/JayChou.flac'
     export default {
         name: "Body",
         data(){
@@ -158,6 +161,7 @@
                 posters2:posters2,
                 music1:music1,
                 music2:music2,
+                music3:music3,
                 audio: null,
                 circleLeft: null,
                 barWidth: null,
@@ -180,7 +184,23 @@
                         source: music2,
                         url: "#",
                         favorited: false
-                    }
+                    },
+                    {
+                        name:"山路十八弯",
+                        artist:"unknown",
+                        cover:posters1,
+                        source:music3,
+                        url:"#",
+                        favorited:false
+                    },
+                    {
+                        name:"我是如此相信",
+                        artist:"周杰伦",
+                        cover:posters4,
+                        source:music4,
+                        url:"#",
+                        favorited:false
+                    },
 
                 ],
                 currentTrack: null,
