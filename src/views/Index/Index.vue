@@ -19,9 +19,9 @@
             <ul v-for="(item,index) in hotRanking" :key="index">
                 <li><label :class="'label'+index">{{index+1}}</label>
                     <el-button type="text" @click="open_article(item,index)">{{item.articleName}}</el-button>
-                    <div style="float: right;font-size: 15px;margin-right: 15px;margin-top: 5px" @click="hot_like(item,index)">
-                        <img style="height: 15px;width: 15px;margin-right: 8px" :src="aixin"/>
-                        <span style="color: #f78585;font-size: 14px" >{{item.articleLike}}个喜欢</span>
+                    <div style="float: right;font-size: 15px;margin-right: 15px" @click="hot_like(item,index)">
+                        <el-button type="text" style="color: #f78585;font-size: 14px;margin-right: -90px">{{item.articleLike}}个喜欢</el-button>
+                        <img style="height: 15px;width: 15px;margin-right: 88px" :src="aixin"/>
                     </div>
                 </li>
             </ul>
@@ -43,9 +43,13 @@
                 </div>
                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
                     <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
-                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
-                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                    <span style="color: #f78585;" @click="time_like(item,index)">{{item.articleLike}}个喜欢</span>
+                    <span style="margin-right: 70px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
+
+                    <div  @click="time_like(item,index)" style="float: right">
+                        <el-button type="text" style="color: #f78585;margin-right: -80px;position: relative;bottom: 8px">{{item.articleLike}}个喜欢</el-button>
+                        <img style="height: 15px;width: 15px;margin-right:80px;position: relative;bottom: 6px" :src="aixin"/>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -85,94 +89,108 @@
             },
 
             hot_like:function (item,index){
-                this.$req.post('/attitude/get_attitude',{
-                    userId:sessionStorage.getItem('userId'),
-                    articleId:item.articleId
-                })
-                    .then(res1=>{
-                        let currentAttitude=res1.data.userAttitude;
-
-                        //更新
-                        if (res1.code===0){
-                            this.$req.post('/attitude/click_attitude',{
-                                userId:sessionStorage.getItem('userId'),
-                                articleId:item.articleId,
-                                currentAttitude:currentAttitude,
-                                futureAttitude:1
-                            })
-                        }
-
-                        if (currentAttitude===0){
-                            this.$req.post('/article/like_article',{
-                                articleId:item.articleId
-                            })
-                                .then(res=>{
-                                    if (res.code===0){
-                                        this.$message({
-                                            type: 'success',
-                                            message:'喜欢成功'
-                                        });
-                                        this.hotRanking[index].articleLike+=1;
-                                    }else{
-                                        this.$message({
-                                            type: 'error',
-                                            message:'系统异常'
-                                        });
-                                    }
-                                })
-                        } else{
-                            this.$message({
-                                type: 'error',
-                                message:'已喜欢'
-                            });
-                        }
+                if(sessionStorage.length===0){
+                    this.$message({
+                        type: 'error',
+                        message:'请先登录'
+                    });
+                }else{
+                    this.$req.post('/attitude/get_attitude',{
+                        userId:sessionStorage.getItem('userId'),
+                        articleId:item.articleId
                     })
+                        .then(res1=>{
+                            let currentAttitude=res1.data.userAttitude;
+
+                            //更新
+                            if (res1.code===0){
+                                this.$req.post('/attitude/click_attitude',{
+                                    userId:sessionStorage.getItem('userId'),
+                                    articleId:item.articleId,
+                                    currentAttitude:currentAttitude,
+                                    futureAttitude:1
+                                })
+                            }
+
+                            if (currentAttitude===0){
+                                this.$req.post('/article/like_article',{
+                                    articleId:item.articleId
+                                })
+                                    .then(res=>{
+                                        if (res.code===0){
+                                            this.$message({
+                                                type: 'success',
+                                                message:'喜欢成功'
+                                            });
+                                            this.hotRanking[index].articleLike+=1;
+                                        }else{
+                                            this.$message({
+                                                type: 'error',
+                                                message:'系统异常'
+                                            });
+                                        }
+                                    })
+                            } else{
+                                this.$message({
+                                    type: 'error',
+                                    message:'已喜欢'
+                                });
+                            }
+                        })
+                }
             },
 
             time_like:function (item,index){
-                this.$req.post('/attitude/get_attitude',{
-                    userId:sessionStorage.getItem('userId'),
-                    articleId:item.articleId
-                })
-                    .then(res1=>{
-                        let currentAttitude=res1.data.userAttitude;
-                        if (res1.code===0){
-                            this.$req.post('/attitude/click_attitude',{
-                                userId:sessionStorage.getItem('userId'),
-                                articleId:item.articleId,
-                                currentAttitude:currentAttitude,
-                                futureAttitude:1
-                            })
-                        }
+               if (sessionStorage.length===0){
+                   this.$message({
+                       type: 'error',
+                       message:'请先登录'
+                   });
+               }else{
+                   this.$req.post('/attitude/get_attitude',{
+                       userId:sessionStorage.getItem('userId'),
+                       articleId:item.articleId
+                   })
+                       .then(res1=>{
+                           let currentAttitude=res1.data.userAttitude;
+                           if (res1.code===0){
+                               this.$req.post('/attitude/click_attitude',{
+                                   userId:sessionStorage.getItem('userId'),
+                                   articleId:item.articleId,
+                                   currentAttitude:currentAttitude,
+                                   futureAttitude:1
+                               })
+                           }
 
-                        if (currentAttitude===0){
-                            this.$req.post('/article/like_article',{
-                                articleId:item.articleId
-                            })
-                                .then(res=>{
-                                    if (res.code===0){
-                                        this.$message({
-                                            type: 'success',
-                                            message:'喜欢成功'
-                                        });
-                                        this.article[index].articleLike+=1;
-                                    }else{
-                                        this.$message({
-                                            type: 'error',
-                                            message:'系统异常'
-                                        });
-                                    }
-                                })
-                        } else{
-                            this.$message({
-                                type: 'error',
-                                message:'已喜欢'
-                            });
-                        }
+                           if (currentAttitude===0){
+                               this.$req.post('/article/like_article',{
+                                   articleId:item.articleId
+                               })
+                                   .then(res=>{
+                                       if (res.code===0){
+                                           this.$message({
+                                               type: 'success',
+                                               message:'喜欢成功'
+                                           });
+                                           this.article[index].articleLike+=1;
+                                       }else{
+                                           this.$message({
+                                               type: 'error',
+                                               message:'系统异常'
+                                           });
+                                       }
+                                   })
+                           } else{
+                               this.$message({
+                                   type: 'error',
+                                   message:'已喜欢'
+                               });
+                           }
 
 
-                    })
+                       })
 
+               }
             },
 
             get_hot_article:function () {
