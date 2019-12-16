@@ -38,7 +38,7 @@
                 </el-main>
             </el-container>
             <el-aside width="220px" >
-                <div class="wrapper" id="app">
+                <div class="wrapper" id="app" ref="kongtiao" @mousedown="mouseDownHandleelse($event)" @mouseup="mouseUpHandleelse($event)">
                     <div class="player">
                         <div class="player__top">
                             <div class="player-cover">
@@ -206,10 +206,38 @@
                 ],
                 currentTrack: null,
                 currentTrackIndex: 0,
-                transitionName: null
+                transitionName: null,
+
+                moveDataelse: {
+                    x: null,
+                    y: null
+                },
+
+
+
             };
         },
         methods:{
+
+            mouseDownHandleelse (event) {
+                this.moveDataelse.x = event.pageX - this.$refs.kongtiao.offsetLeft
+                this.moveDataelse.y = event.pageY - this.$refs.kongtiao.offsetTop
+                event.currentTarget.style.cursor = 'move'
+                window.onmousemove = this.mouseMoveHandleelse
+            },
+            mouseMoveHandleelse (event) {
+                let moveLeft = event.pageX - this.moveDataelse.x + 'px'
+                let moveTop = event.pageY - this.moveDataelse.y + 'px'
+                this.$refs.kongtiao.style.left = moveLeft
+                this.$refs.kongtiao.style.top = moveTop
+            },
+            mouseUpHandleelse (event) {
+                window.onmousemove = null
+                event.currentTarget.style.cursor = 'move'
+                console.log('鼠标松开了')
+            },
+
+
             goTo: function (index) {
                 this.$router.push(index);
             },
@@ -362,8 +390,10 @@
     .wrapper{
 
         position: fixed;
-        right: 2%;
-        bottom: 0%;
+        right:1%;
+        bottom: 1%;
+        cursor: move;
+
     }
 
     * {
