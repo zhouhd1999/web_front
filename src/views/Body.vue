@@ -25,7 +25,7 @@
                             <el-menu-item index="3-2" @click="goTo('/Body/C')">C/C++</el-menu-item>
                             <el-menu-item index="3-3" @click="goTo('/Body/Python')">Python</el-menu-item>
                         </el-submenu>
-                        <el-menu-item index="4" @click="goTo('/Body/123')">福利专区</el-menu-item>
+                        <el-menu-item index="4" @click="goTo('/Body/Welfare')">福利专区</el-menu-item>
                         <el-menu-item index="5">关于博主</el-menu-item>
                         <el-menu-item index="6" @click="goTo('/Body/LeaveMessage')">给我留言</el-menu-item>
                         <el-menu-item index="7" @click="goTo('/Body/Sponsorship')">赞助作者</el-menu-item>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="progress__duration">{{ duration }} </div>
                             </div>
-                            <div class="progress__bar">
+                            <div class="progress__bar" @click="clickProgress">
 <!--                            <div class="progress__bar" @click="clickProgress">-->
                                 <div class="progress__current" :style="{ width : barWidth }" style="position: fixed"></div>
                             </div>
@@ -285,27 +285,24 @@
                 this.duration = durmin + ":" + dursec;
                 this.currentTime = curmin + ":" + cursec;
             },
-            // updateBar(x) {
-            //     let progress = this.$refs.progress;
-            //     let maxduration = this.audio.duration;
-            //     let position = x - progress.offsetLeft;
-            //     let percentage = (100 * position) / progress.offsetWidth;
-            //     if (percentage > 100) {
-            //         percentage = 100;
-            //     }
-            //     if (percentage < 0) {
-            //         percentage = 0;
-            //     }
-            //     this.barWidth = percentage + "%";
-            //     this.circleLeft = percentage + "%";
-            //     this.audio.currentTime = (maxduration * percentage) / 100;
-            //     this.audio.play();
-            // },
-            // clickProgress(e) {
-            //     this.isTimerPlaying = true;
-            //     this.audio.pause();
-            //     this.updateBar(e.pageX);
-            // },
+            updateBar(x) {
+                let progress = this.$refs.progress;
+                let maxduration = this.audio.duration ;
+                let position = x ;
+                let percentage = position;
+
+                console.log(x)
+
+                this.barWidth = percentage + "px";
+                this.circleLeft = percentage + "%";
+                this.audio.currentTime = (maxduration * percentage) / 100;
+                this.audio.play();
+            },
+            clickProgress(e) {
+                this.isTimerPlaying = true;
+                this.audio.pause();
+                this.updateBar(e.offsetX);
+            },
             prevTrack() {
                 this.transitionName = "scale-in";
                 this.isShowCover = false;
@@ -378,7 +375,6 @@
 </script>
 
 <style scoped>
-
     .left {
         float: left;
         width: 60px;
@@ -388,18 +384,16 @@
     }
 
     .wrapper{
-
         position: fixed;
         right:1%;
         bottom: 45%;
         cursor: move;
-
+        z-index: 99;
     }
 
     * {
         box-sizing: border-box;
     }
-
 
     .icon {
         display: inline-block;
@@ -409,7 +403,6 @@
         stroke: currentColor;
         fill: currentColor;
     }
-
 
     .player {
         background: #eef3f7;

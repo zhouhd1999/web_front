@@ -12,7 +12,7 @@ import Person from "../views/Person";
 import Body from "../views/Body";
 import Article_edit from "../views/Article_edit";
 import Article from "../views/Article"
-
+import Welfare from "../views/Welfare/Welfare";
 Vue.use(VueRouter);
 
 //防止多次点击同一路径报错
@@ -52,7 +52,7 @@ const routes = [
           path:'PersonalDiary',
           name:'PersonalDiary',
           component:PersonalDiary,
-        },
+      },
       {
         path:'Java',
         name:'Java',
@@ -77,7 +77,13 @@ const routes = [
         path:'LeaveMessage',
         name:'LeaveMessage',
         component:LeaveMessage,
-      }]
+      },
+      {
+        path:'Welfare',
+        name:'Welfare',
+        component:Welfare,
+      }
+    ]
   },
 
 
@@ -97,7 +103,11 @@ const routes = [
     component:Article,
   },
 
-
+  {
+    path:'/Welfare',
+    name:'Welfare',
+    component:Welfare,
+  }
 
   // {
   //   path: '/about',
