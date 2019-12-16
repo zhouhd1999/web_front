@@ -85,7 +85,7 @@
                             </div>
                             <div class="progress__bar">
 <!--                            <div class="progress__bar" @click="clickProgress">-->
-                                <div class="progress__current" :style="{ width : barWidth }" style="position: absolute"></div>
+                                <div class="progress__current" :style="{ width : barWidth }" style="position: fixed"></div>
                             </div>
                             <div class="progress__time">{{ currentTime }}</div>
                         </div>
@@ -264,7 +264,7 @@
             },
             generateTime() {
                 let width = (100 / this.audio.duration) * this.audio.currentTime;
-                this.barWidth = width + "%";
+                this.barWidth = width + "px";
                 this.circleLeft = width + "%";
                 let durmin = Math.floor(this.audio.duration / 60);
                 let dursec = Math.floor(this.audio.duration - durmin * 60);
@@ -285,22 +285,22 @@
                 this.duration = durmin + ":" + dursec;
                 this.currentTime = curmin + ":" + cursec;
             },
-            updateBar(x) {
-                let progress = this.$refs.progress;
-                let maxduration = this.audio.duration;
-                let position = x - progress.offsetLeft;
-                let percentage = (100 * position) / progress.offsetWidth;
-                if (percentage > 100) {
-                    percentage = 100;
-                }
-                if (percentage < 0) {
-                    percentage = 0;
-                }
-                this.barWidth = percentage + "%";
-                this.circleLeft = percentage + "%";
-                this.audio.currentTime = (maxduration * percentage) / 100;
-                this.audio.play();
-            },
+            // updateBar(x) {
+            //     let progress = this.$refs.progress;
+            //     let maxduration = this.audio.duration;
+            //     let position = x - progress.offsetLeft;
+            //     let percentage = (100 * position) / progress.offsetWidth;
+            //     if (percentage > 100) {
+            //         percentage = 100;
+            //     }
+            //     if (percentage < 0) {
+            //         percentage = 0;
+            //     }
+            //     this.barWidth = percentage + "%";
+            //     this.circleLeft = percentage + "%";
+            //     this.audio.currentTime = (maxduration * percentage) / 100;
+            //     this.audio.play();
+            // },
             // clickProgress(e) {
             //     this.isTimerPlaying = true;
             //     this.audio.pause();
@@ -391,7 +391,7 @@
 
         position: fixed;
         right:1%;
-        bottom: 1%;
+        bottom: 45%;
         cursor: move;
 
     }
@@ -614,10 +614,10 @@
 
     .progress__bar {
         height: 6px;
-        width: 100%;
+        width: 100px;
         cursor: pointer;
         background-color: #d0d8e6;
-        display: inline-block;
+        display:inline-grid;
         border-radius: 10px;
     }
 
