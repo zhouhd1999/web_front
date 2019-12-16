@@ -17,6 +17,13 @@ import Technology from "../views/Technology/Technology";
 import PHP from "../views/Technology/PHP";
 import Other from "../views/Technology/Other";
 import Welfare from "../views/Welfare/Welfare";
+import UserController from "../views/UserController";
+import ArticleManagement from "../views/ArticleManagement";
+import Contribution from "../views/Contribution";
+import TagManagement from "../views/TagManagement";
+
+
+
 
 Vue.use(VueRouter);
 
@@ -105,11 +112,34 @@ const routes = [
       },
     ]
   },
-
   {
     path:'/Background',
     name:'Background',
     component:Background,
+    children: [
+      {
+        path: 'UserController',
+        name: 'UserController',
+        component: UserController,
+
+      },
+      {
+        path: 'ArticleManagement',
+        name: 'ArticleManagement',
+        component: ArticleManagement,
+      },
+      {
+        path: 'Contribution',
+        name: 'Contribution',
+        component: Contribution,
+      },
+      {
+        path: 'TagManagement',
+        name: 'TagManagement',
+        component:TagManagement,
+      }
+
+    ]
   },
   {
     path:'/Person',
@@ -126,17 +156,27 @@ const routes = [
     name:'Article',
     component:Article,
   },
+  {
+    path:'/UserController',
+    name:'UserController',
+    component:UserController,
+  },
+  {
+    path:'/ArticleManagement',
+    name:'ArticleManagement',
+    component:ArticleManagement,
+  },
+  {
+    path:'/Contribution',
+    name:'Contribution',
+    component:Contribution,
+  },
+  {
+    path:'/TagManagement',
+    name:'TagManagement',
+    component:TagManagement,
+  }
 
-
-
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
 ]
 
 const router = new VueRouter({

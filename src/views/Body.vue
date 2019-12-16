@@ -222,20 +222,20 @@
         methods:{
 
             mouseDownHandleelse (event) {
-                this.moveDataelse.x = event.pageX - this.$refs.kongtiao.offsetLeft
-                this.moveDataelse.y = event.pageY - this.$refs.kongtiao.offsetTop
-                event.currentTarget.style.cursor = 'move'
+                this.moveDataelse.x = event.pageX - this.$refs.kongtiao.offsetLeft;
+                this.moveDataelse.y = event.pageY - this.$refs.kongtiao.offsetTop;
+                event.currentTarget.style.cursor = 'move';
                 window.onmousemove = this.mouseMoveHandleelse
             },
             mouseMoveHandleelse (event) {
-                let moveLeft = event.pageX - this.moveDataelse.x + 'px'
-                let moveTop = event.pageY - this.moveDataelse.y + 'px'
-                this.$refs.kongtiao.style.left = moveLeft
+                let moveLeft = event.pageX - this.moveDataelse.x + 'px';
+                let moveTop = event.pageY - this.moveDataelse.y + 'px';
+                this.$refs.kongtiao.style.left = moveLeft;
                 this.$refs.kongtiao.style.top = moveTop
             },
             mouseUpHandleelse (event) {
-                window.onmousemove = null
-                event.currentTarget.style.cursor = 'move'
+                window.onmousemove = null;
+                event.currentTarget.style.cursor = 'move';
                 console.log('鼠标松开了')
             },
 
@@ -368,8 +368,8 @@
                 let link = document.createElement('link');
                 link.rel = "prefetch";
                 link.href = element.cover;
-                link.as = "image"
-                document.head.appendChild(link)
+                link.as = "image";
+                document.head.appendChild(link);
             }
         }
 
