@@ -161,7 +161,7 @@
 
 
       return{
-        backgroundManagement:false,
+        backgroundManagement:true,
         Graph:'',
         realGraph:'',
         ruleForm: {

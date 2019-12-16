@@ -1,10 +1,10 @@
 <template>
     <div>
         <el-container>
-            <el-aside width="200px"></el-aside>
+<!--            <el-aside width="200px"></el-aside>-->
             <el-container>
                 <el-row class="tac">
-                    <el-col :span="6">
+                    <el-col :span="5">
                         <el-menu
                                 default-active="2"
                                 class="el-menu-vertical-demo"
@@ -28,6 +28,7 @@
                                     <el-menu-item index="1-4-1">选项1</el-menu-item>
                                 </el-submenu>
                             </el-submenu>
+
                             <el-menu-item index="2">
                                 <i class="el-icon-menu"></i>
                                 <span slot="title">导航二</span>
@@ -42,7 +43,7 @@
                             </el-menu-item>
                         </el-menu>
                     </el-col>
-                    <el-col :span="18">
+                    <el-col :span="19">
                         123
                     </el-col>
                 </el-row>
@@ -73,6 +74,6 @@
 
 <style scoped>
     .tac{
-        width: 1019.2px;
+        width: 800px;
     }
 </style>

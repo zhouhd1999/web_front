@@ -16,6 +16,7 @@ import Background from "../views/Background";
 import Technology from "../views/Technology/Technology";
 import PHP from "../views/Technology/PHP";
 import Other from "../views/Technology/Other";
+import Welfare from "../views/Welfare/Welfare";
 
 Vue.use(VueRouter);
 
@@ -96,7 +97,13 @@ const routes = [
         path:'LeaveMessage',
         name:'LeaveMessage',
         component:LeaveMessage,
-      }]
+      },
+      {
+        path:'Welfare',
+        name:'Welfare',
+        component:Welfare,
+      },
+    ]
   },
 
   {
