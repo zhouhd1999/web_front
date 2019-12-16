@@ -34,19 +34,19 @@
                             <div style="padding: 10px;color: #409EFF"><i class="el-icon-chat-line-round"></i><span style="font-size: 16px;margin: 5px">小伙伴们正在吐槽</span></div>
                             <el-divider class="el-divider1"></el-divider>
                             <div>
-<!--                                <div v-for="item in message">-->
-<!--                                    <el-row style="margin: 15px">-->
-<!--                                        <el-col :span="2">-->
-<!--                                            <div style="color: #409EFF;padding: 5px;word-wrap : break-word ;margin-top: 3px"><span>{{item.reviewerName}}</span></div>-->
-<!--                                        </el-col>-->
-<!--                                        <el-col :span="18" style="background: #fbfbfb;border: 1px #eee solid;font-size: 15px;margin-bottom: 5px;border-radius: 5px">-->
-<!--                                            <div class="shixin"></div>-->
-<!--                                            <div class="kongxin"></div>-->
-<!--                                            <div style="padding: 10px"><span >{{item.content}}<br/></span></div>-->
-<!--                                            <span style="color: #bbb;font-size: 14px;margin-left: 10px">{{item.dateTime}}</span>-->
-<!--                                        </el-col>-->
-<!--                                    </el-row>-->
-<!--                                </div>-->
+                                <div v-for="item in message">
+                                    <el-row style="margin: 15px">
+                                        <el-col :span="2">
+                                            <div style="color: #409EFF;padding: 5px;word-wrap : break-word ;margin-top: 3px"><span>{{item.userId}}</span></div>
+                                        </el-col>
+                                        <el-col :span="18" style="background: #fbfbfb;border: 1px #eee solid;font-size: 15px;margin-bottom: 5px;border-radius: 5px">
+                                            <div class="shixin"></div>
+                                            <div class="kongxin"></div>
+                                            <div style="padding: 10px"><span >{{item.discussionContent}}<br/></span></div>
+                                            <span style="color: #bbb;font-size: 14px;margin-left: 10px">{{item.discussionDateTime}}</span>
+                                        </el-col>
+                                    </el-row>
+                                </div>
                                 <div style="text-align: center">
 <!--                                    <el-pagination-->
 <!--                                            @size-change="handleSizeChange"-->
@@ -171,5 +171,23 @@
     .form{
         padding: 12px 20px;
         background-color: #f7f7f7;
+    }
+    .kongxin{
+        width:0;
+        height:0;
+        border:10px solid transparent;
+        border-right-color:#fbfbfb;
+        position: absolute;
+        top: 16px;
+        left:60px;
+    }
+    .shixin{
+        width:0;
+        height:0;
+        border:10px solid transparent;
+        border-right-color:#eee;
+        position: absolute;
+        top: 16px;
+        left:59px;
     }
 </style>
