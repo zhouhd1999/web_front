@@ -18,7 +18,9 @@
                                             <el-avatar :size="100" :src="circleUrl"></el-avatar>
                                             <el-upload
                                                     class="upload-demo"
-                                                    action="http://127.0.0.1:8081/cloud/uploadFile"
+                                                    action="http://127.0.0.1:8081/information/update_head"
+                                                    :data="upData"
+                                                    :show-file-list="false"
                                                     list-type="picture">
                                                 <el-button type="text" style="margin-left: 20px">修改头像</el-button>
                                                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -52,21 +54,21 @@
                             <div v-for="(item,index) in my_article" class="content">
                                 <div class="top">
                                     <img :src="tubiao" style="height: 20px;width: 20px" />
-                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagName}}</span>
                                     <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
                                     </div>
                                 </div>
                                 <div class="mid">
                                     <el-row>
                                         <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
+                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                                     </el-row>
                                 </div>
                                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
                                     <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                                    <span style="color: #f78585;">{{item.articleLike}}个喜欢</span>
+                                    <span style="color: #f78585;">{{item.article.articleLike}}个喜欢</span>
 
                                 </div>
                                 <el-divider></el-divider>
@@ -83,20 +85,20 @@
                             <div v-for="(item,index) in my_love_article" class="content">
                                 <div class="top">
                                     <img :src="tubiao" style="height: 20px;width: 20px" />
-                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagName}}</span>
                                     <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
                                     </div>
                                 </div>
                                 <div class="mid">
                                     <el-row>
                                         <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
+                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                                     </el-row>
                                 </div>
                                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
-                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
+                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.nickname}}</span>
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
 
                                 </div>
                                 <el-divider></el-divider>
@@ -253,11 +255,12 @@
         },
         methods: {
 
+
             open_article:function (item) {
                 this.$router.push({
                     name:'Article',
                     params:{
-                        articleId:item.articleId
+                        articleId:item.article.articleId
                     }
                 });
             },
@@ -526,6 +529,9 @@
                 });
             },
             getUserMessage(){
+
+                this.circleUrl=sessionStorage.getItem('circleUrl')
+                console.log(this.circleUrl)
                 this.$req.post('/information/get_information_by_user_id',{
                     userId:sessionStorage.getItem('userId'),
                 })
@@ -559,7 +565,12 @@
         computed:{
             idPlaceholder:function () {
                 return this.ID+"                  ID是唯一标识，不可修改！";
-            }
+            },
+            upData:function(){
+                return {
+                    userId: 2
+                }
+            },
         },
         created() {
             this.getUserMessage();

@@ -161,6 +161,7 @@
 
 
       return{
+
         backgroundManagement:true,
         Graph:'',
         realGraph:'',
@@ -203,7 +204,7 @@
             { validator: checkUser, trigger: 'blur' }
           ]
         },
-        circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        circleUrl: require('@/assets/image/11.jpg'),
         outVisible:false,
         innerVisible:false,
         LoginBtn:true,
@@ -342,7 +343,15 @@
                         sessionStorage.setItem('userAccount',this.data.userAccount);
                         sessionStorage.setItem('userPermission',this.data.userPermission);
                         sessionStorage.setItem('userNickname',this.data.userNickname);
-                        console.log(sessionStorage);
+                        this.$req.post('/information/get_information_by_user_id',{
+                          userId:this.data.userId
+                        })
+                                .then(res1=>{
+                                  if(res1.code===0){
+                                    this.circleUrl=require('@/assets/image/'+res1.data.infoHeadUrl);
+                                    sessionStorage.setItem('circleUrl',this.circleUrl)
+                                  }
+                                })
                       }
                       else {
                         this.$message({

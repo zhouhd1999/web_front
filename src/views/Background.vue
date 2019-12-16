@@ -83,13 +83,5 @@
     };
 </script>
 <style>
-    .el-header {
-        background-color: #2b2b2b;
-        /*color: #333;*/
-        line-height: 60px;
-    }
 
-    .el-aside {
-        /*color: #333;*/
-    }
 </style>

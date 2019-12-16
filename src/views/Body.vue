@@ -407,6 +407,7 @@
     }
 
     .player {
+        margin-right: 0;
         background: #eef3f7;
         width: 150px;
         min-height: 250px;

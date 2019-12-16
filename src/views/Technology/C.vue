@@ -7,25 +7,32 @@
             </div>
             <el-divider></el-divider>
 
-            <div v-for="(item,index) in article" class="content">
-                <div class="top">
-                    <div style="font-size: 20px;position: relative;top: -18px;margin-left: 80px">
-                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+            <div style="margin-top: 20px" >
+                <div v-for="(item,index) in article" class="content">
+                    <div class="top">
+                        <img :src="tubiao" style="height: 20px;width: 20px" />
+                        <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
+                        <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
+                            <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+                        </div>
+                    </div>
+                    <div class="mid">
+                        <el-row>
+                            <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
+                            <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
+                        </el-row>
+                    </div>
+                    <div class="bottom" style="float: right;font-size: 14px;color: #777">
+                        <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
+                        <span style="margin-right: 70px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
+
+                        <div  @click="time_like(item,index)" style="float: right">
+                            <el-button type="text" style="color: #f78585;margin-right: -80px;position: relative;bottom: 8px">{{item.articleLike}}个喜欢</el-button>
+                            <img style="height: 15px;width: 15px;margin-right:80px;position: relative;bottom: 6px" :src="aixin"/>
+                        </div>
+
                     </div>
                 </div>
-                <div class="mid">
-                    <el-row>
-                        <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
-                        <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
-                    </el-row>
-                </div>
-                <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{userNickname}}</span>
-                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
-                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                    <span style="color: #f78585;" >{{item.articleLike}}个喜欢</span>
-                </div>
-                <el-divider></el-divider>
             </div>
         </div>
     </div>
@@ -34,10 +41,12 @@
 <script>
     import aixin from '@/assets/爱心.png'
     import hhh from '@/assets/img-3.png'
+    import tubiao from '@/assets/标签.png'
     export default {
         name: "C",
         data() {
             return {
+                tubiao:tubiao,
                 aixin: aixin,
                 hhh: hhh,
                 article: [],
