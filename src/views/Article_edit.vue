@@ -84,6 +84,10 @@
                             })
                                 .then(res=>{
                                     if (res.code===0){
+                                        this.radio='';
+                                        this.value='';
+                                        this.title='';
+                                        this.describe='';
                                         this.$message({
                                             type: 'success',
                                             message:'提交成功!'
@@ -112,6 +116,10 @@
                             })
                                 .then(res=>{
                                     if (res.code===0){
+                                        this.radio='';
+                                        this.value='';
+                                        this.title='';
+                                        this.describe='';
                                         this.$message({
                                             type: 'info',
                                             message:'已提交到管理员处审核，请耐心等待!'

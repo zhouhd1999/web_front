@@ -11,8 +11,12 @@ import LeaveMessage from "../views/LeaveMessage/LeaveMessage";
 import Person from "../views/Person";
 import Body from "../views/Body";
 import Article_edit from "../views/Article_edit";
-import Article from "../views/Article"
-import Welfare from "../views/Welfare/Welfare";
+import Article from "../views/Article";
+import Background from "../views/Background";
+import Technology from "../views/Technology/Technology";
+import PHP from "../views/Technology/PHP";
+import Other from "../views/Technology/Other";
+
 Vue.use(VueRouter);
 
 //防止多次点击同一路径报错
@@ -22,7 +26,7 @@ VueRouter.prototype.push = function push(location) {
 };
 
 const routes = [
-    //默认路径
+  //默认路径
   {
     path: '/',
     name: 'Body',
@@ -49,9 +53,9 @@ const routes = [
         component:PersonalShow,
       },
       {
-          path:'PersonalDiary',
-          name:'PersonalDiary',
-          component:PersonalDiary,
+        path:'PersonalDiary',
+        name:'PersonalDiary',
+        component:PersonalDiary,
       },
       {
         path:'Java',
@@ -64,6 +68,16 @@ const routes = [
         component:C,
       },
       {
+        path:'Other',
+        name:'Other',
+        component:Other,
+      },
+      {
+        path:'PHP',
+        name:'PHP',
+        component:PHP,
+      },
+      {
         path:'Python',
         name:'Python',
         component:Python,
@@ -74,19 +88,22 @@ const routes = [
         component:Sponsorship,
       },
       {
+        path:'Technology',
+        name:'Technology',
+        component:Technology,
+      },
+      {
         path:'LeaveMessage',
         name:'LeaveMessage',
         component:LeaveMessage,
-      },
-      {
-        path:'Welfare',
-        name:'Welfare',
-        component:Welfare,
-      }
-    ]
+      }]
   },
 
-
+  {
+    path:'/Background',
+    name:'Background',
+    component:Background,
+  },
   {
     path:'/Person',
     name:'Person',
@@ -103,11 +120,7 @@ const routes = [
     component:Article,
   },
 
-  {
-    path:'/Welfare',
-    name:'Welfare',
-    component:Welfare,
-  }
+
 
   // {
   //   path: '/about',

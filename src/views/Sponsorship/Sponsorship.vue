@@ -37,6 +37,7 @@
 
 <style scoped>
     .sponsor{
+        width: 99.5%;
         background: white;
     }
     .top{

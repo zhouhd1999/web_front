@@ -23,7 +23,9 @@
                             <template slot="title">技术杂谈</template>
                             <el-menu-item index="3-1" @click="goTo('/Body/Java')">Java</el-menu-item>
                             <el-menu-item index="3-2" @click="goTo('/Body/C')">C/C++</el-menu-item>
-                            <el-menu-item index="3-3" @click="goTo('/Body/Python')">Python</el-menu-item>
+                            <el-menu-item index="3-3" @click="goTo('/Body/PHP')">PHP</el-menu-item>
+                            <el-menu-item index="3-4" @click="goTo('/Body/Python')">Python</el-menu-item>
+                            <el-menu-item index="3-5" @click="goTo('/Body/Other')">其他</el-menu-item>
                         </el-submenu>
                         <el-menu-item index="4" @click="goTo('/Body/Welfare')">福利专区</el-menu-item>
                         <el-menu-item index="5">关于博主</el-menu-item>

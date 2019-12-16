@@ -54,7 +54,7 @@
                                     <img :src="tubiao" style="height: 20px;width: 20px" />
                                     <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
                                     <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                                        <el-button type="text" style="font-size: 20px">{{item.articleName}}</el-button>
+                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
                                     </div>
                                 </div>
                                 <div class="mid">
@@ -64,7 +64,6 @@
                                     </el-row>
                                 </div>
                                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
                                     <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
                                     <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
                                     <span style="color: #f78585;">{{item.articleLike}}个喜欢</span>
@@ -84,22 +83,20 @@
                             <div v-for="(item,index) in my_love_article" class="content">
                                 <div class="top">
                                     <img :src="tubiao" style="height: 20px;width: 20px" />
-                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tag}}</span>
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
                                     <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                                        <el-button type="text" style="font-size: 20px">{{item.title}}</el-button>
+                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
                                     </div>
                                 </div>
                                 <div class="mid">
                                     <el-row>
                                         <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.introduction}}<br/></span></div></el-col>
+                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
                                     </el-row>
                                 </div>
                                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.author}}</span>
-                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.date}}</span>
-                                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                                    <span style="color: #f78585;">{{item.like}}个喜欢</span>
+                                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
 
                                 </div>
                                 <el-divider></el-divider>
@@ -256,6 +253,15 @@
         },
         methods: {
 
+            open_article:function (item) {
+                this.$router.push({
+                    name:'Article',
+                    params:{
+                        articleId:item.articleId
+                    }
+                });
+            },
+
             //树形控件
             new_file: function () {
                 if(this.node_data ==''||this.node ==''){
@@ -365,7 +371,19 @@
                 }
 
                 if (tab.label == "我的喜欢") {
-
+                    this.$req.post('/article/get_like_article',{
+                        userId:sessionStorage.getItem('userId')
+                    })
+                        .then(res=>{
+                            if (res.code===0){
+                                this.my_love_article=res.data;
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '我的喜欢获取失败！'
+                                });
+                            }
+                        })
                 }
 
                 if (tab.label == "我的文章") {
@@ -379,7 +397,7 @@
                             else{
                                 this.$message({
                                     type: 'error',
-                                    message: '我的文章失败！'
+                                    message: '我的文章获取失败！'
                                 });
                             }
                         })

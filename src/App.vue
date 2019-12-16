@@ -1,71 +1,75 @@
 <template>
+
   <div id="app">
+
     <div id="nav">
 
       <el-container>
         <el-header class="header" height="80px">
-          <div><p class="ziti">OUR WEBSITE</p></div>
+          <div><p class="ziti" @click="goTo('/')">MY WEBSITE</p></div>
           <div style="position: relative;float: left;top: -115px" v-show="returnBack" @click="goBack">
-              <i class="el-icon-back"></i>
+            <i class="el-icon-back"></i>
           </div>
           <el-dropdown style="float: right;position: relative;top: -117px;right: 20px " v-show="WelcomeBtn" @command="handleCommand">
-              <el-avatar :size="50" :src="circleUrl"></el-avatar>
+            <el-avatar :size="50" :src="circleUrl"></el-avatar>
             <el-dropdown-menu slot="dropdown" >
               <el-dropdown-item command="openUrl">个人中心</el-dropdown-item>
+              <el-dropdown-item command="background" v-show="backgroundManagement">后台管理</el-dropdown-item>
               <el-dropdown-item style="text-align: center" command="cancellation">注  销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <div style="float: right;font-size: 20px;position: relative;top: -100px" v-show="LoginBtn">
-              <i class="el-icon-switch-button"></i>
-              <el-button type="text" style="margin-left: 3px;font-size: 15px;margin-right: 10px;color: #eee" @click="ShowLogin">登录</el-button>
+            <i class="el-icon-switch-button"></i>
+            <el-button type="text" style="margin-left: 3px;font-size: 15px;margin-right: 10px;color: #eee" @click="ShowLogin">登录</el-button>
           </div>
         </el-header>
         <el-container>
           <router-view/>
-      </el-container>
+        </el-container>
         <el-footer class="footer" height="60px">
           <p>谈笑风生工作室版权所有</p>
         </el-footer>
       </el-container>
+
     </div>
 
 
-<!--    登录窗口-->
+    <!--    登录窗口-->
     <el-dialog
-          title="登录"
-          :visible.sync="outVisible"
-          width="30%"
-          :close-on-click-modal="false"
-          :before-close="handleClose">
+            title="登录"
+            :visible.sync="outVisible"
+            width="30%"
+            :close-on-click-modal="false"
+            :before-close="handleClose">
       <el-dialog
               width="40%"
               title="注册"
               :visible.sync="innerVisible"
               :close-on-click-modal="false"
               append-to-body>
-            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="账号" prop="acct">
-                <el-input v-model="ruleForm.acct" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="密码" prop="pass">
-                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="确认密码" prop="checkPass">
-                <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="验证码" prop="checkGraph">
-                <el-input  placeholder="请输入验证码" class="yanzhengma_input"  v-model="ruleForm.checkGraph" autocomplete="off"/>
-                <input type="button"  @click="createCode"  class="verification" v-model="Graph"/>
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="账号" prop="acct">
+            <el-input v-model="ruleForm.acct" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="checkPass">
+            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="验证码" prop="checkGraph">
+            <el-input  placeholder="请输入验证码" class="yanzhengma_input"  v-model="ruleForm.checkGraph" autocomplete="off"/>
+            <input type="button"  @click="createCode"  class="verification" v-model="Graph"/>
 
-              </el-form-item>
-<!--              <el-form-item label="手机号码" prop="age">-->
-<!--                <el-input v-model.number="ruleForm.age"></el-input>-->
-<!--              </el-form-item>-->
-              <el-form-item style="margin-left: 323px">
-                <el-button type="info" @click="register_cancel">取消</el-button>
-                <el-button type="primary" @click="submit('ruleForm')">提交</el-button>
-              </el-form-item>
-            </el-form>
+          </el-form-item>
+          <!--              <el-form-item label="手机号码" prop="age">-->
+          <!--                <el-input v-model.number="ruleForm.age"></el-input>-->
+          <!--              </el-form-item>-->
+          <el-form-item style="margin-left: 323px">
+            <el-button type="info" @click="register_cancel">取消</el-button>
+            <el-button type="primary" @click="submit('ruleForm')">提交</el-button>
+          </el-form-item>
+        </el-form>
       </el-dialog>
       <el-form :model="ruleForm1" status-icon :rules="rules1" ref="ruleForm1" label-width="100px">
         <el-form-item label="用户名" prop="name">
@@ -157,6 +161,7 @@
 
 
       return{
+        backgroundManagement:false,
         Graph:'',
         realGraph:'',
         ruleForm: {
@@ -210,6 +215,13 @@
 
     methods:{
 
+      check_background_management:function(){
+        console.log(typeof sessionStorage.getItem('userId'))
+        if(sessionStorage.getItem('userId')==='2'){
+          this.backgroundManagement=true;
+        }
+      },
+
       register_cancel:function(){
         this.innerVisible=false;
       },
@@ -218,7 +230,7 @@
       handleCommand(command){
         //注销
         if (command==='cancellation'){
-            sessionStorage.clear();
+          sessionStorage.clear();
           this.$message({
             type: 'success',
             message:'注销成功'
@@ -230,6 +242,9 @@
           this.$router.push('/Person');
           //this.returnBack=true;
         }
+        if (command==='background'){
+          this.$router.push('/Background');
+        }
       },
 
       //注册
@@ -238,32 +253,32 @@
         this.$refs[formName].validate((valid) => {
           if (valid){
             this.$req.post('/user/insert_user',{
-                userAccount:this.ruleForm.acct,
-                userPassword:this.ruleForm.pass,
-                userNickname:this.ruleForm.acct,
-                userPermission:2
+              userAccount:this.ruleForm.acct,
+              userPassword:this.ruleForm.pass,
+              userNickname:this.ruleForm.acct,
+              userPermission:2
             })
-                .then(res=>{
-                   if (res.code===0){
-                       this.$message({
-                           type: 'success',
-                           message:'注册成功'
-                       });
-                       this.ruleForm1.name=this.ruleForm.acct;
-                       this.ruleForm1.pass=this.ruleForm.pass;
-                       this.innerVisible=false;
-                   }else if (res.code===2){
-                       this.$message({
-                           type: 'error',
-                           message:'该账号已存在'
-                       });
-                   } else {
-                       this.$message({
-                           type: 'error',
-                           message:'注册失败'
-                       });
-                   }
-                });
+                    .then(res=>{
+                      if (res.code===0){
+                        this.$message({
+                          type: 'success',
+                          message:'注册成功'
+                        });
+                        this.ruleForm1.name=this.ruleForm.acct;
+                        this.ruleForm1.pass=this.ruleForm.pass;
+                        this.innerVisible=false;
+                      }else if (res.code===2){
+                        this.$message({
+                          type: 'error',
+                          message:'该账号已存在'
+                        });
+                      } else {
+                        this.$message({
+                          type: 'error',
+                          message:'注册失败'
+                        });
+                      }
+                    });
           }else{
             this.$message({
               type: 'error',
@@ -307,41 +322,41 @@
       //登录
       Login:function(formName){
         this.$refs[formName].validate((valid) => {
-            if (valid){
-              this.$req.post('/user/login',{
-                userAccount:this.ruleForm1.name,
-                password:this.ruleForm1.pass
-              })
-                .then(res=>{
-                  if (res.code===0){
-                    this.data=res.data;
-                    this.$message({
-                      type: 'success',
-                      message:this.data.userNickname + '  欢迎您!',
+          if (valid){
+            this.$req.post('/user/login',{
+              userAccount:this.ruleForm1.name,
+              password:this.ruleForm1.pass
+            })
+                    .then(res=>{
+                      if (res.code===0){
+                        this.data=res.data;
+                        this.$message({
+                          type: 'success',
+                          message:this.data.userNickname + '  欢迎您!',
 
-                    });
-                    this.outVisible=false;
-                    this.WelcomeBtn=true;
-                    this.LoginBtn=false;
-                    sessionStorage.setItem('userId',this.data.userId);
-                    sessionStorage.setItem('userAccount',this.data.userAccount);
-                    sessionStorage.setItem('userPermission',this.data.userPermission);
-                    sessionStorage.setItem('userNickname',this.data.userNickname);
-                    console.log(sessionStorage);
-                  }
-                  else {
-                    this.$message({
-                      type: 'error',
-                      message: '账号或密码错误'
-                    });
-                  }
-                })
-            }else {
-              this.$message({
-                type: 'error',
-                message:'请填写正确信息'
-              });
-            }
+                        });
+                        this.outVisible=false;
+                        this.WelcomeBtn=true;
+                        this.LoginBtn=false;
+                        sessionStorage.setItem('userId',this.data.userId);
+                        sessionStorage.setItem('userAccount',this.data.userAccount);
+                        sessionStorage.setItem('userPermission',this.data.userPermission);
+                        sessionStorage.setItem('userNickname',this.data.userNickname);
+                        console.log(sessionStorage);
+                      }
+                      else {
+                        this.$message({
+                          type: 'error',
+                          message: '账号或密码错误'
+                        });
+                      }
+                    })
+          }else {
+            this.$message({
+              type: 'error',
+              message:'请填写正确信息'
+            });
+          }
         })
 
       },
@@ -370,6 +385,7 @@
         this.LoginBtn=false;
         this.WelcomeBtn=true;
       }
+      this.check_background_management();
     }
   }
 </script>
@@ -392,10 +408,10 @@
   }
 
   .footer{
-      background: none repeat scroll 0 0 #333;
-      text-align: center;
-      font-size: 12px;
-      color: #ddd;
+    background: none repeat scroll 0 0 #333;
+    text-align: center;
+    font-size: 12px;
+    color: #ddd;
   }
 
   .ziti{
