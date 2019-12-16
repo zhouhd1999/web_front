@@ -1,6 +1,11 @@
 <template>
     <div>
-        <div style="margin-top: 20px">
+        <div style="margin-top: 20px" class="diary">
+            <div class="top1">
+                <span >博主日记</span>
+                <el-button type="info" style="float: right;right: 30px;position: relative;bottom: 5px"><i class="el-icon-share"></i>分享</el-button>
+            </div>
+            <el-divider></el-divider>
             <div v-for="(item,index) in article" class="content">
                 <div class="top">
                     <div style="font-size: 20px;position: relative;top: -18px;margin-left: 80px">
@@ -19,6 +24,7 @@
                     <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
                     <span style="color: #f78585;" >{{item.articleLike}}个喜欢</span>
                 </div>
+                <el-divider></el-divider>
             </div>
         </div>
     </div>
@@ -53,8 +59,8 @@
             },
 
             get_article:function () {
-                    this.$req.post('/article/get_articleByUserId', {
-                        userId: 2,
+                    this.$req.post('/article/get_article_by_tag_id', {
+                        tagId: 6,
                     })
                         .then(res => {
                             if (res.code === 0) {
@@ -81,7 +87,18 @@
 </script>
 
 <style scoped>
+    .diary{
+        background-color: white;
+    }
 
+    .top1{
+        height: 40px;
+        font-size: 20px;
+        font-weight: 500;
+        position: relative;
+        left: 20px;
+        top: 20px;
+    }
     .top{
         height: 40px;
 

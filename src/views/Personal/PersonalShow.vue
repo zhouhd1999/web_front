@@ -1,6 +1,11 @@
 <template>
     <div>
-        <div style="margin-top: 20px">
+        <div style="margin-top: 20px" class="show">
+            <div class="top1">
+                <span >个人展示</span>
+                <el-button type="info" style="float: right;right: 30px;position: relative;bottom: 5px"><i class="el-icon-share"></i>分享</el-button>
+            </div>
+            <el-divider></el-divider>
             <div v-for="(item,index) in article" class="content">
                 <div class="top">
                     <div style="font-size: 20px;position: relative;top: -18px;margin-left: 80px">
@@ -16,6 +21,7 @@
                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
                     <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
                 </div>
+                <el-divider></el-divider>
             </div>
         </div>
     </div>
@@ -75,6 +81,18 @@
 </script>
 
 <style scoped>
+    .show{
+        background-color: white;
+    }
+
+    .top1{
+        height: 40px;
+        font-size: 20px;
+        font-weight: 500;
+        position: relative;
+        left: 20px;
+        top: 20px;
+    }
     .top{
         height: 40px;
 
