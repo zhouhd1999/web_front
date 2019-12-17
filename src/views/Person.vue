@@ -15,7 +15,7 @@
                                 <el-row>
                                     <el-col :span="4">
                                         <div style="margin-left: 10px">
-                                            <el-avatar :size="100" :src="circleUrl"></el-avatar>
+
                                             <el-upload
                                                     class="upload-demo"
                                                     action="http://127.0.0.1:8081/information/update_head"
@@ -23,8 +23,9 @@
                                                     :show-file-list="false"
                                                     :before-upload="beforeAvatarUpload"
                                                     :on-success="handleAvatarSuccess">
-                                                <el-button type="text" style="margin-left: 20px">修改头像</el-button>
-                                                <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过500kb</div>
+                                                <el-avatar :size="100" :src="circleUrl"></el-avatar>
+<!--                                                <el-button type="text" style="margin-left: 20px">修改头像</el-button>-->
+                                                <div slot="tip" class="el-upload__tip">只能上传jpg文件</div>
                                             </el-upload>
                                         </div>
                                     </el-col>
@@ -53,26 +54,41 @@
                             <el-button style="float: right;position: relative;top: -60px" @click="new_article">新建文章</el-button>
                             <el-divider></el-divider>
                             <div v-for="(item,index) in my_article" class="content">
-                                <div class="top">
-                                    <img :src="tubiao" style="height: 20px;width: 20px" />
-                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagName}}</span>
-                                    <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
+                                    <div class="top" >
+                                        <img :src="tubiao" style="height: 20px;width: 20px" />
+                                        <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagName}}</span>
+                                        <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
+                                            <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
+                                            <span v-if="(item.article.articleState===1)" style="position: relative;float: right">
+                                            <img :src="shenhezhong" style="width: 80px;height: 80px">
+                                        </span>
+                                            <span v-if="(item.article.articleState===0)" style="position: relative;float: right">
+                                            <img :src="shenhetongguo" style="width: 80px;height: 80px">
+                                        </span>
+                                            <span v-if="(item.article.articleState===-1)" style="position: relative;float: right">
+                                            <img :src="shenheshibai" style="width: 80px;height: 80px">
+                                        </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mid">
-                                    <el-row>
-                                        <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
-                                    </el-row>
-                                </div>
-                                <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
-                                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                                    <span style="color: #f78585;">{{item.article.articleLike}}个喜欢</span>
+                                    <div class="mid">
+                                        <el-row>
+                                            <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
+                                            <el-col :span="17">
+                                                <div style="padding: 10px;position: relative;bottom: 80px">
+                                                <span style="word-break: break-all;color: #777">
+                                                    {{item.article.articleDescribe}}<br/>
+                                                </span>
+                                                </div>
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+                                    <div class="bottom" style="float: right;font-size: 14px;color: #777">
+                                        <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
+                                        <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
+                                        <span style="color: #f78585;">{{item.article.articleLike}}个喜欢</span>
 
-                                </div>
-                                <el-divider></el-divider>
+                                    </div>
+                                    <el-divider></el-divider>
                             </div>
 
                         </div>
@@ -148,6 +164,40 @@
                         </div>
 
                     </el-tab-pane>
+                    <el-tab-pane label="草稿箱">
+                        <div style="padding: 0 32px 30px;min-height: 450px">
+                            <div style="font-size: 20px">
+                                <h3>草稿箱</h3>
+                            </div>
+                            <el-divider></el-divider>
+                            <div v-for="(item,index) in drafts" class="content">
+                                <div class="top" >
+                                    <img :src="tubiao" style="height: 20px;width: 20px" />
+                                    <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagName}}</span>
+                                    <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
+                                        <el-button type="text" style="font-size: 20px" @click="exit_article(item,index)">{{item.article.articleName}}</el-button>
+                                    </div>
+                                </div>
+                                <div class="mid">
+                                    <el-row>
+                                        <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
+                                        <el-col :span="17">
+                                            <div style="padding: 10px">
+                                                <span style="word-break: break-all;color: #777;position: relative;bottom: 10px">
+                                                    {{item.article.articleDescribe}}<br/>
+                                                </span>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                                <div class="bottom" style="float: right;font-size: 14px;color: #777">
+                                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
+                                </div>
+                                <el-divider></el-divider>
+                            </div>
+
+                        </div>
+                    </el-tab-pane>
                 </el-tabs>
             </el-main>
         </el-container>
@@ -193,6 +243,9 @@
     import aixin from '@/assets/爱心.png'
     import tubiao from '@/assets/标签.png'
     import hhh from '@/assets/img-3.png'
+    import shenhezhong from '@/assets/审核中.png'
+    import shenhetongguo from '@/assets/审核通过.png'
+    import shenheshibai from '@/assets/审核失败.png'
 
     export default {
         name: "Person",
@@ -235,6 +288,9 @@
                         {validator: checkNumber, trigger: 'blur'}
                     ],
                 },
+                shenhezhong:shenhezhong,
+                shenhetongguo:shenhetongguo,
+                shenheshibai:shenheshibai,
                 aixin: aixin,
                 tubiao: tubiao,
                 hhh: hhh,
@@ -251,7 +307,8 @@
                 profession: "",
                 introduction: "",
                 my_article: [],
-                my_love_article:[]
+                my_love_article:[],
+                drafts:[],
             };
         },
         methods: {
@@ -278,6 +335,15 @@
             open_article:function (item) {
                 this.$router.push({
                     name:'Article',
+                    params:{
+                        articleId:item.article.articleId
+                    }
+                });
+            },
+
+            exit_article:function (item) {
+                this.$router.push({
+                    name:'Article_edit',
                     params:{
                         articleId:item.article.articleId
                     }
@@ -409,12 +475,40 @@
                 }
 
                 if (tab.label == "我的文章") {
+                    let arr=[];
                     this.$req.post('/article/get_articleByUserId',{
                         userId:sessionStorage.getItem('userId')
                     })
                         .then(res=>{
                             if (res.code===0){
-                                this.my_article=res.data;
+                                res.data.forEach(function (c) {
+                                    if (c.article.articleState<=1&&c.article.articleState>=-1){
+                                        arr.push(c)
+                                    }
+                                })
+                                this.my_article=arr;
+                            }
+                            else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '我的文章获取失败！'
+                                });
+                            }
+                        })
+                }
+                if (tab.label =="草稿箱"){
+                    let arr=[];
+                    this.$req.post('/article/get_articleByUserId',{
+                        userId:sessionStorage.getItem('userId')
+                    })
+                        .then(res=>{
+                            if (res.code===0){
+                                res.data.forEach(function (c) {
+                                    if (c.article.articleState===2){
+                                        arr.push(c)
+                                    }
+                                })
+                                this.drafts=arr;
                             }
                             else{
                                 this.$message({

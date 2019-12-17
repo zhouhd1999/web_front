@@ -11,37 +11,40 @@
                     <el-divider ></el-divider>
                     <div>
                         <div style="padding: 0 10px 10px 10px">
-                            <el-input placeholder="请输入标题" v-model="title" clearable>
+                            <el-input placeholder="请输入标题" v-model="title" clearable style="width: 520px">
                                 <template slot="prepend">文章标题：</template>
                             </el-input>
                         </div>
                         <div style="padding: 0 10px 10px 10px">
-                            <el-input placeholder="请输入描述" v-model="describe" clearable>
+                            <el-input placeholder="请输入描述" v-model="describe" clearable style="width: 520px;position: relative;top: 10px">
                                 <template slot="prepend">简单描述：</template>
                             </el-input>
                         </div>
-                        <div style="padding: 0 10px 20px 10px">
+                        <div style="padding: 0 10px 20px 10px;position: relative;top: 20px">
                             <el-tag class="tag_class">选择标签：</el-tag>
                             <el-radio-group v-model="radio" v-for="item in tag">
                                 <el-radio :label=item.tagId style="margin-left: 20px">{{item.tagName}}</el-radio>
                             </el-radio-group>
                         </div>
-                        <div style="padding: 0 10px 20px 10px">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
+                        <div class="right">
+                            <el-tooltip class="item" effect="dark" content="选择预览图片" placement="right-start">
+                                <el-upload
+                                        class="avatar-uploader"
+                                        action="http://127.0.0.1:8081/article/insert_article_preview_img"
+                                        :show-file-list="false"
+                                        :on-success="handleAvatarSuccess"
+                                        :before-upload="beforeAvatarUpload">
+                                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-tooltip>
                         </div>
+
                     </div>
                     <mavon-editor v-model="value" style="height: 600px" @save="submit_article" :toolbars='toolbars'></mavon-editor>
                     <div style="padding: 20px;text-align: center">
                         <el-button type="primary" @click="submit_article">提交</el-button>
-                        <el-button type="info">保存</el-button>
+                        <el-button type="info" @click="save_article">保存</el-button>
                     </div>
                 </div>
             </el-main>
@@ -97,11 +100,15 @@
                 value:'',
                 radio:'',
                 tag:[],
+                file_name:'',
+                articleId:this.$route.params.articleId,
+                flag:1
             };
         },
         methods:{
 
             handleAvatarSuccess(res, file) {
+                this.file_name=file.name;
                 this.imageUrl = URL.createObjectURL(file.raw);
             },
             beforeAvatarUpload(file) {
@@ -132,7 +139,7 @@
             },
 
             submit_article:function(){
-                if (this.radio===''||this.title===''||this.describe===''||this.value===''){
+                if (this.radio===''||this.title===''||this.describe===''||this.value===''||this.imageUrl===''){
                     this.$message({
                         type: 'info',
                         message:'请先完善信息!'
@@ -149,7 +156,8 @@
                                 articleContent:this.value,
                                 articleName:this.title,
                                 articleDescribe:this.describe,
-                                articleState:1
+                                articleState:0,
+                                articlePreviewImg:this.file_name
                             })
                                 .then(res=>{
                                     if (res.code===0){
@@ -157,6 +165,7 @@
                                         this.value='';
                                         this.title='';
                                         this.describe='';
+                                        this.imageUrl='';
                                         this.$message({
                                             type: 'success',
                                             message:'提交成功!'
@@ -181,7 +190,8 @@
                                 articleContent:this.value,
                                 articleName:this.title,
                                 articleDescribe:this.describe,
-                                articleState:2
+                                articleState:1,
+                                articlePreviewImg:this.file_name
                             })
                                 .then(res=>{
                                     if (res.code===0){
@@ -189,6 +199,7 @@
                                         this.value='';
                                         this.title='';
                                         this.describe='';
+                                        this.imageUrl='';
                                         this.$message({
                                             type: 'info',
                                             message:'已提交到管理员处审核，请耐心等待!'
@@ -207,23 +218,111 @@
 
             },
 
+            save_article:function(){
+                if (this.flag===1){
+                    this.$req.post('/article/insert_article',{
+                        userId:sessionStorage.getItem('userId'),
+                        tagId:this.radio,
+                        articleContent:this.value,
+                        articleName:this.title,
+                        articleDescribe:this.describe,
+                        articleState:2,
+                        articlePreviewImg:this.file_name
+                    })
+                        .then(res=>{
+                            if (res.code===0){
+                                this.radio='';
+                                this.value='';
+                                this.title='';
+                                this.describe='';
+                                this.imageUrl='';
+                                this.$message({
+                                    type: 'success',
+                                    message:'保存成功!'
+                                });
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message:'保存失败，请稍后重试!'
+                                });
+                            }
+                        })
+                }else{
+                    this.$req.post('/article/update_article',{
+                        userId:sessionStorage.getItem('userId'),
+                        tagId:this.radio,
+                        articleContent:this.value,
+                        articleName:this.title,
+                        articleDescribe:this.describe,
+                        articleState:2,
+                        articlePreviewImg:this.file_name
+                    })
+                        .then(res=>{
+                            if (res.code===0){
+                                this.radio='';
+                                this.value='';
+                                this.title='';
+                                this.describe='';
+                                this.imageUrl='';
+                                this.$message({
+                                    type: 'success',
+                                    message:'保存成功!'
+                                });
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message:'保存失败，请稍后重试!'
+                                });
+                            }
+                        })
+                }
+            },
+
             handleClose(done) {
                 done();
             },
+
+            getArticle(){
+                this.$req.post('/article/get_article_by_article_id',{
+                    articleId:this.articleId
+                })
+                    .then(res=>{
+                        if (res.code===0){
+                            console.log(res.data);
+                            this.value=res.data.articleContent;
+                            this.title=res.data.articleName;
+                            this.describe=res.data.articleDescribe;
+                            this.radio=res.tagId;
+                            this.imageUrl=require('@/assets/image/'+res.data.articlePreviewImg);
+                        }
+                    })
+            }
         },
         created() {
             this.get_tag();
+            if (this.articleId!==undefined){
+                this.getArticle();
+                this.flag=0;
+            }
         },
         watch:{
             // title:function () {
             //     this.value='# '+this.title;
             // }
+        },
+        computed:{
+
         }
     }
 </script>
 
 <style scoped>
-    .avatar-uploader .el-upload {
+
+    .avatar-uploader {
+        margin-left: 590px;
+        margin-bottom: -150px;
+        bottom: 160px;
+        width: 178px;
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;

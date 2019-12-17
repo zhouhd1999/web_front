@@ -5,6 +5,11 @@
             </el-aside>
             <el-main>
                 <div style="background-color: white">
+                    <div class="top1">
+                        <span >Java</span>
+                        <el-button type="info" style="float: right;right: 30px;position: relative;bottom: 5px"><i class="el-icon-share"></i>分享</el-button>
+                    </div>
+                    <el-divider></el-divider>
                     <div>
                         <mavon-editor
                                 style="width: 975.2px"
@@ -189,5 +194,13 @@
         position: absolute;
         top: 16px;
         left:59px;
+    }
+    .top1{
+        height: 40px;
+        font-size: 20px;
+        font-weight: 500;
+        position: relative;
+        left: 20px;
+        top: 20px;
     }
 </style>
