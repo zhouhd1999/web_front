@@ -7,31 +7,30 @@
             </div>
             <el-divider></el-divider>
 
-            <div style="margin-top: 20px" >
-                <div v-for="(item,index) in article" class="content">
+            <div style="margin-top: 20px;min-height:400px" >
+                <div v-for="(item,index) in data" class="content">
                     <div class="top">
-                        <img :src="tubiao" style="height: 20px;width: 20px" />
-                        <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagId}}</span>
-                        <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
-                            <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+                        <div style="font-size: 20px;position: relative;top: -25px;margin-left: 40px">
+                            <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
                         </div>
                     </div>
                     <div class="mid">
                         <el-row>
                             <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
-                            <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
+                            <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                         </el-row>
                     </div>
                     <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                        <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.userId}}</span>
-                        <span style="margin-right: 70px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
+                        <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.nickname}}</span>
+                        <span style="margin-right: 70px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
 
                         <div  @click="time_like(item,index)" style="float: right">
-                            <el-button type="text" style="color: #f78585;margin-right: -80px;position: relative;bottom: 8px">{{item.articleLike}}个喜欢</el-button>
+                            <el-button type="text" style="color: #f78585;margin-right: -80px;position: relative;bottom: 8px">{{item.article.articleLike}}个喜欢</el-button>
                             <img style="height: 15px;width: 15px;margin-right:80px;position: relative;bottom: 6px" :src="aixin"/>
                         </div>
 
                     </div>
+                    <el-divider></el-divider>
                 </div>
             </div>
         </div>
@@ -43,9 +42,10 @@
     import hhh from '@/assets/img-3.png'
     import tubiao from '@/assets/标签.png'
     export default {
-        name: "C",
+        name: "PHP",
         data() {
             return {
+                data:[],
                 tubiao:tubiao,
                 aixin: aixin,
                 hhh: hhh,
@@ -54,14 +54,68 @@
             }
         },
         methods:{
+            time_like:function (item,index){
+                if (sessionStorage.length===0){
+                    this.$message({
+                        type: 'error',
+                        message:'请先登录'
+                    });
+                }else{
+                    this.$req.post('/attitude/get_attitude',{
+                        userId:sessionStorage.getItem('userId'),
+                        articleId:item.article.articleId
+                    })
+                        .then(res1=>{
+                            let currentAttitude=res1.data.userAttitude;
+                            if (res1.code===0){
+                                this.$req.post('/attitude/click_attitude',{
+                                    userId:sessionStorage.getItem('userId'),
+                                    articleId:item.article.articleId,
+                                    currentAttitude:currentAttitude,
+                                    futureAttitude:1
+                                })
+                            }
+
+                            if (currentAttitude===0){
+                                this.$req.post('/article/like_article',{
+                                    articleId:item.article.articleId
+                                })
+                                    .then(res=>{
+                                        if (res.code===0){
+                                            this.$message({
+                                                type: 'success',
+                                                message:'喜欢成功'
+                                            });
+                                            console.log(this.data[index])
+                                            this.data[index].article.articleLike+=1;
+                                        }else{
+                                            this.$message({
+                                                type: 'error',
+                                                message:'系统异常'
+                                            });
+                                        }
+                                    })
+                            } else{
+                                this.$message({
+                                    type: 'error',
+                                    message:'已喜欢'
+                                });
+                            }
+
+
+                        })
+
+                }
+            },
             ShowLogin:function(){
                 this.outVisible=true;
             },
             open_article:function (item) {
+                console.log(item);
                 this.$router.push({
                     name:'Article',
                     params:{
-                        articleId:item.articleId
+                        articleId:item.article.articleId
                     }
                 });
             },
@@ -72,7 +126,7 @@
                 })
                     .then(res => {
                         if (res.code === 0) {
-                            this.article = res.data;
+                            this.data = res.data;
                         } else {
                             this.$message({
                                 type: 'error',

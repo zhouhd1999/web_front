@@ -2,7 +2,7 @@
     <div>
         <el-container>
             <el-aside width="240px">
-                <div style="position: fixed;left: 140px;bottom: 20px">
+                <div style="position: fixed;left: 115px;bottom: 60px">
                     <div class="left">
                         <el-tooltip class="item" effect="dark" content="我要投稿" placement="left-start">
                             <el-button icon="el-icon-circle-plus-outline" style="background-color:rgba(0,0,0,0);border: 0;font-size: 60px" circle @click="new_article('/Article_edit')"></el-button>
@@ -31,15 +31,15 @@
                         <el-menu-item index="5">关于博主</el-menu-item>
                         <el-menu-item index="6" @click="goTo('/Body/LeaveMessage')">给我留言</el-menu-item>
                         <el-menu-item index="7" @click="goTo('/Body/Sponsorship')">赞助作者</el-menu-item>
-                        <el-menu-item index="8">技术交流</el-menu-item>
-                        <el-menu-item index="9">项目合作</el-menu-item>
+                        <el-menu-item index="8">正在开发</el-menu-item>
+                        <el-menu-item index="9">正在开发</el-menu-item>
                     </el-menu>
                 </el-header>
                 <el-main>
                     <router-view/>
                 </el-main>
             </el-container>
-            <el-aside width="220px" >
+            <el-aside width="260px" style="overflow:Scroll;overflow-x:hidden">
                 <div class="wrapper" id="app" ref="kongtiao" @mousedown="mouseDownHandleelse($event)" @mouseup="mouseUpHandleelse($event)">
                     <div class="player">
                         <div class="player__top">
@@ -236,7 +236,7 @@
             mouseUpHandleelse (event) {
                 window.onmousemove = null;
                 event.currentTarget.style.cursor = 'move';
-                console.log('鼠标松开了')
+                //console.log('鼠标松开了')
             },
 
 
@@ -293,7 +293,7 @@
                 let position = x ;
                 let percentage = position;
 
-                console.log(x)
+                //console.log(x)
 
                 this.barWidth = percentage + "px";
                 this.circleLeft = percentage + "%";
@@ -524,6 +524,7 @@
             margin-bottom: 0;
         }
     }
+
     .player-controls__item::before {
         content: "";
         position: absolute;

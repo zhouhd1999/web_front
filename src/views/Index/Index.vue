@@ -32,13 +32,13 @@
                     <img :src="tubiao" style="height: 20px;width: 20px" />
                     <el-button type="text" style="color: black;margin-left: 8px;font-size: 16px;position: relative;top: -2px" @click="goto(item.article.tagId)">{{item.tagName}}</el-button>
                     <div style="font-size: 20px;position: relative;top: -45px;margin-left: 180px">
-                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
+                        <el-button type="text" style="font-size: 20px;position: relative;bottom: 6px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
                     </div>
                 </div>
                 <div class="mid">
                     <el-row>
                         <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
-                        <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
+                        <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe| ellipsis}}<br/></span></div></el-col>
                     </el-row>
                 </div>
                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
@@ -78,6 +78,15 @@
                 hotRanking:[],
                 article:[]
             }
+        },
+        filters: {
+            ellipsis (value) {
+                if (!value) return ''
+                if (value.length > 200) {
+                    return value.slice(0,200) + '...'
+                }
+                return value
+            },
         },
         methods:{
             goto:function(tag_id){

@@ -21,9 +21,10 @@
                                                     action="http://127.0.0.1:8081/information/update_head"
                                                     :data="upData"
                                                     :show-file-list="false"
-                                                    list-type="picture">
+                                                    :before-upload="beforeAvatarUpload"
+                                                    :on-success="handleAvatarSuccess">
                                                 <el-button type="text" style="margin-left: 20px">修改头像</el-button>
-                                                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                                                <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过500kb</div>
                                             </el-upload>
                                         </div>
                                     </el-col>
@@ -45,7 +46,7 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="我的文章">
-                        <div style="padding: 0 32px 30px">
+                        <div style="padding: 0 32px 30px;min-height: 450px">
                             <div style="font-size: 20px">
                                 <h3>我的文章</h3>
                             </div>
@@ -77,7 +78,7 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="我的喜欢">
-                        <div style="padding: 0 32px 30px">
+                        <div style="padding: 0 32px 30px;min-height: 450px">
                             <div style="font-size: 20px">
                                 <h3>我的喜欢</h3>
                             </div>
@@ -254,7 +255,25 @@
             };
         },
         methods: {
+            handleAvatarSuccess(res, file) {
+                this.$message.success('上传成功');
+                this.circleUrl=require('@/assets/image/'+file.name);
+                sessionStorage.setItem('circleUrl',this.circleUrl);
+                console.log(this.circleUrl)
+            },
 
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG&&!isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            },
 
             open_article:function (item) {
                 this.$router.push({
@@ -308,7 +327,7 @@
             },
             //新建文件夹
             append(data) {
-                console.log(data);
+                //console.log(data);
                 this.$prompt('请输入文件名', '新建文件夹', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -323,12 +342,12 @@
                         this.$set(data, 'children', []);
                     }
                     data.children.push(newChild);
-                    console.log(data);
+                    //console.log(data);
                     this.updateCloudInfo();
                 })
             },
             remove(node, data) {
-                console.log(node, data);
+                //console.log(node, data);
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -362,10 +381,10 @@
                         userId: sessionStorage.getItem('userId')
                     })
                         .then(res => {
-                            console.log(res);
+                            //console.log(res);
                             if (res.code === 0) {
                                 this.data = JSON.parse(res.data.directoryContent);
-                                console.log(this.data);
+                                //console.log(this.data);
                                 id=res.data.countId;
                             } else {
 
@@ -411,7 +430,7 @@
             submit_file_success:function(){
 
                 const newChild={id:id++, label: this.fileName,};
-                console.log(id);
+                //console.log(id);
                 this.node.data.children.push(newChild);
                 this.updateCloudInfo();
                 this.$message({
@@ -421,7 +440,7 @@
             },
 
             before_upload:function(file){
-                console.log(this.node);
+                //console.log(this.node);
                 this.fileName=file.name;
                 if(this.node_data ===''||this.node===''){
                     this.$message({
@@ -438,9 +457,6 @@
                 }
             },
 
-            upload:function(){
-
-            },
 
             downLoad:function(){
                 if(this.node.data.children!==undefined){
@@ -529,9 +545,6 @@
                 });
             },
             getUserMessage(){
-
-                this.circleUrl=sessionStorage.getItem('circleUrl')
-                console.log(this.circleUrl)
                 this.$req.post('/information/get_information_by_user_id',{
                     userId:sessionStorage.getItem('userId'),
                 })
@@ -543,6 +556,8 @@
                             this.tell=parseInt(res.data.infoPhoneNumber);
                             this.profession=res.data.infoProfession;
                             this.introduction=res.data.infoIntroduction;
+
+                            this.circleUrl=require('@/assets/image/'+res.data.infoHeadUrl);
 
                             this.ruleForm.nickname=this.nickname;
                             this.ruleForm.age=this.age;

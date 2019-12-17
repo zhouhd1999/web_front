@@ -89,6 +89,8 @@
 </template>
 
 <script>
+  import Person from "./views/Person";
+
   export default {
     data(){
       //外
@@ -150,8 +152,8 @@
 
       let checkGraph = (rule, value, callback) => {
 
-        console.log(this.realGraph);
-        console.log(value);
+        //console.log(this.realGraph);
+        //console.log(value);
         if(value.toUpperCase() !== this.realGraph){
           callback(new Error('验证码错误'));
         }else{
@@ -204,7 +206,7 @@
             { validator: checkUser, trigger: 'blur' }
           ]
         },
-        circleUrl: require('@/assets/image/11.jpg'),
+        circleUrl: '',
         outVisible:false,
         innerVisible:false,
         LoginBtn:true,
@@ -217,7 +219,7 @@
     methods:{
 
       check_background_management:function(){
-        console.log(typeof sessionStorage.getItem('userId'))
+        //console.log(typeof sessionStorage.getItem('userId'))
         if(sessionStorage.getItem('userId')==='2'){
           this.backgroundManagement=true;
         }
@@ -241,10 +243,12 @@
         }
         if (command==='openUrl'){
           this.$router.push('/Person');
+          this.WelcomeBtn=false;
           //this.returnBack=true;
         }
         if (command==='background'){
           this.$router.push('/Background');
+          this.WelcomeBtn=false;
         }
       },
 
@@ -350,6 +354,7 @@
                                   if(res1.code===0){
                                     this.circleUrl=require('@/assets/image/'+res1.data.infoHeadUrl);
                                     sessionStorage.setItem('circleUrl',this.circleUrl)
+                                    //console.log(sessionStorage.getItem('circleUrl'))
                                   }
                                 })
                       }
@@ -395,7 +400,20 @@
         this.WelcomeBtn=true;
       }
       this.check_background_management();
+    },
+    watch:{
+      $route(to,from){
+
+        this.circleUrl=sessionStorage.getItem('circleUrl');
+        console.log(this.circleUrl)
+        if (to.path.indexOf("/Body")>=0||to.name==='Index'){
+          this.WelcomeBtn=true;
+        }else{
+          this.WelcomeBtn=false;
+        }
+      }
     }
+
   }
 </script>
 

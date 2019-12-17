@@ -1,59 +1,121 @@
 <template>
     <div>
-        <div style="margin-top: 20px" class="Python">
+        <div style="margin-top: 20px" class="C">
             <div class="top1">
                 <span >Python</span>
                 <el-button type="info" style="float: right;right: 30px;position: relative;bottom: 5px"><i class="el-icon-share"></i>分享</el-button>
             </div>
             <el-divider></el-divider>
-            <div v-for="(item,index) in article" class="content">
-                <div class="top">
-                    <div style="font-size: 20px;position: relative;top: -18px;margin-left: 80px">
-                        <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+
+            <div style="margin-top: 20px;min-height:400px" >
+                <div v-for="(item,index) in data" class="content">
+                    <div class="top">
+                        <div style="font-size: 20px;position: relative;top: -25px;margin-left: 40px">
+                            <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
+                        </div>
                     </div>
+                    <div class="mid">
+                        <el-row>
+                            <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
+                            <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
+                        </el-row>
+                    </div>
+                    <div class="bottom" style="float: right;font-size: 14px;color: #777">
+                        <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{item.nickname}}</span>
+                        <span style="margin-right: 70px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.article.articleDateTime}}</span>
+
+                        <div  @click="time_like(item,index)" style="float: right">
+                            <el-button type="text" style="color: #f78585;margin-right: -80px;position: relative;bottom: 8px">{{item.article.articleLike}}个喜欢</el-button>
+                            <img style="height: 15px;width: 15px;margin-right:80px;position: relative;bottom: 6px" :src="aixin"/>
+                        </div>
+
+                    </div>
+                    <el-divider></el-divider>
                 </div>
-                <div class="mid">
-                    <el-row>
-                        <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
-                        <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
-                    </el-row>
-                </div>
-                <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                    <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{userNickname}}</span>
-                    <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
-                    <img style="height: 15px;width: 15px;margin-right: 8px;margin-left: 30px" :src="aixin"/>
-                    <span style="color: #f78585;" >{{item.articleLike}}个喜欢</span>
-                </div>
-                <el-divider></el-divider>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-
     import aixin from '@/assets/爱心.png'
     import hhh from '@/assets/img-3.png'
-
+    import tubiao from '@/assets/标签.png'
     export default {
-        name: "Python",
-        data(){
-            return{
-                aixin:aixin,
-                hhh:hhh,
-                article:[],
-                userNickname:sessionStorage.getItem('userNickname')
+        name: "PHP",
+        data() {
+            return {
+                data:[],
+                tubiao:tubiao,
+                aixin: aixin,
+                hhh: hhh,
+                article: [],
+                userNickname: sessionStorage.getItem('userNickname')
             }
         },
         methods:{
+            time_like:function (item,index){
+                if (sessionStorage.length===0){
+                    this.$message({
+                        type: 'error',
+                        message:'请先登录'
+                    });
+                }else{
+                    this.$req.post('/attitude/get_attitude',{
+                        userId:sessionStorage.getItem('userId'),
+                        articleId:item.article.articleId
+                    })
+                        .then(res1=>{
+                            let currentAttitude=res1.data.userAttitude;
+                            if (res1.code===0){
+                                this.$req.post('/attitude/click_attitude',{
+                                    userId:sessionStorage.getItem('userId'),
+                                    articleId:item.article.articleId,
+                                    currentAttitude:currentAttitude,
+                                    futureAttitude:1
+                                })
+                            }
+
+                            if (currentAttitude===0){
+                                this.$req.post('/article/like_article',{
+                                    articleId:item.article.articleId
+                                })
+                                    .then(res=>{
+                                        if (res.code===0){
+                                            this.$message({
+                                                type: 'success',
+                                                message:'喜欢成功'
+                                            });
+                                            console.log(this.data[index])
+                                            this.data[index].article.articleLike+=1;
+                                        }else{
+                                            this.$message({
+                                                type: 'error',
+                                                message:'系统异常'
+                                            });
+                                        }
+                                    })
+                            } else{
+                                this.$message({
+                                    type: 'error',
+                                    message:'已喜欢'
+                                });
+                            }
+
+
+                        })
+
+                }
+            },
             ShowLogin:function(){
                 this.outVisible=true;
             },
             open_article:function (item) {
+                console.log(item);
                 this.$router.push({
                     name:'Article',
                     params:{
-                        articleId:item.articleId
+                        articleId:item.article.articleId
                     }
                 });
             },
@@ -64,7 +126,7 @@
                 })
                     .then(res => {
                         if (res.code === 0) {
-                            this.article = res.data;
+                            this.data = res.data;
                         } else {
                             this.$message({
                                 type: 'error',
@@ -87,7 +149,7 @@
 </script>
 
 <style scoped>
-    .Python{
+    .C{
         background-color: white;
     }
 

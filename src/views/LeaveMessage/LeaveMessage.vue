@@ -57,7 +57,7 @@
         data(){
             return{
                 currentPage:1,
-                pagesize:5, //每页的评论数
+                pagesize:10, //每页的评论数
                 alipay:alipay,
                 commentAreaId:1,
                 reviewer:'',
