@@ -1,60 +1,94 @@
 <template>
     <div>
-        <div v-for="(item,index) in article" class="content">
-            <div class="top">
-                <div style="font-size: 20px;position: relative;top: -18px;margin-left: 80px">
-                    <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.articleName}}</el-button>
+        <el-button @click="showArtileType()" autofocus="true">生活笔记</el-button>
+        <el-button @click="showArtileType_1()">技术杂谈</el-button>
+        <div style="margin-top: -130px; height: 200px;">
+            <el-collapse-transition>
+                <div>
+                    <div  v-show="show3" v-for="(item,index) in article"class="content">
+                        <div class="top">
+                            <div style="font-size: 20px;position: relative;top: -20px;margin-left: 80px">
+                                <el-button type="text" style="font-size: 20px" @click="ShowArticle(index)">{{item.articleName}}</el-button>
+                            </div>
+                        </div>
+
+                        <div class="mid">
+                            <el-row>
+                                <el-col :span="8"><img style="height: 160px" /></el-col>
+                                <el-col :span="16"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
+                            </el-row>
+                        </div>
+                        <div class="bottom">
+                            <br>
+                            <el-col >{{item.nickname}}</el-col>
+                        </div>
+                        <el-divider></el-divider>
+                        <div  v-show=item.isShow>
+                            <el-input
+
+                                    :readonly="true"
+                                    type="textarea"
+                                    :rows="12"
+                                    v-model="item.articleContent">
+                            </el-input>
                 </div>
-            </div>
-            <div class="mid">
-                <el-row>
-                    <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
-                    <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
-                </el-row>
-            </div>
-            <div class="bottom" style="float: right;font-size: 14px;color: #777">
-                <span style="margin-right: 60px"><i class="el-icon-user" style="margin-right: 10px"></i>{{userNickname}}</span>
-                <span style="margin-right: 30px"><i class="el-icon-time" style="margin-right: 10px"></i>{{item.articleDateTime}}</span>
-            </div>
-            <el-divider></el-divider>
+                    </div>
+                </div>
+            </el-collapse-transition>
         </div>
     </div>
 </template>
 
-
 <script>
-    import aixin from '@/assets/爱心.png'
-    import hhh from '@/assets/img-3.png'
     export default {
-        name: "ArticleManagement",
-        data() {
-            return {
-                aixin: aixin,
-                hhh: hhh,
-                article: [],
-                userNickname: sessionStorage.getItem('userNickname')
-            }
-        },
+        data(){
+        return{
+        show3: true,
+        article: []
+    }
+    },
         methods:{
-            ShowLogin:function(){
-                this.outVisible=true;
-            },
-            open_article:function (item) {
-                this.$router.push({
-                    name:'Article',
-                    params:{
-                        articleId:item.articleId
-                    }
-                });
+
+            showArtileType(){
+              this.show3=!this.show3;
+
             },
 
-            get_article:function () {
-                this.$req.post('/article/get_article_by_tag_id', {
-                    tagId: 2,
-                })
+            showArtileType_1(){
+                this.show3=!this.show3
+            },
+
+
+            ShowArticle(index){
+                this.article[index].isShow=!this.article[index].isShow;
+                console.log(this.article[index].isShow)
+
+            },
+            get_article:function (sta) {
+                this.article=[];
+                var data={
+                    state:sta
+                }
+                this.$req.post('/article/get_article_by_state',data)
                     .then(res => {
                         if (res.code === 0) {
-                            this.article = res.data;
+                            console.log(res.data)
+                            for (var i=0;i<res.data.length;i++){
+                                this.article.push({
+                                    articleName:'',
+                                    nickname:'',
+                                    articleContent:'',
+                                    isShow:false
+                                });
+                            }
+                            for(let i = 0; i < res.data.length;i++)
+                            {
+                                this.article[i].articleName=res.data[i].article.articleName;
+                                this.article[i].articleDescribe=res.data[i].article.articleDescribe;
+                                this.article[i].nickname=res.data[i].nickname;
+                                this.article[i].articleContent=res.data[i].article.articleContent;
+                            }
+                            console.log("放进去的数组"+this.article)
                         } else {
                             this.$message({
                                 type: 'error',
@@ -63,7 +97,42 @@
                         }
                     })
             },
-
+            delArticle(item){
+                console.log(item.article.articleId)
+                this.$req.post('/article/update_article_state',{
+                    state:-1,
+                    article:item.article.articleId
+                })
+                    .then(res =>{
+                        if(res.code === 0){
+                            this.get_article();
+                            this.$message.success("已拒绝");
+                        }
+                        else{
+                            this.$message({
+                                type: 'error',
+                                message: '文章获取失败！'
+                            });
+                        }
+                    })
+            },
+            pasArticle(item){
+                this.$req.post('/article/update_article_state',{
+                    articleId:item.article.articleId
+                })
+                    .then(res =>{
+                        if(res.code === 0){
+                            this.get_article();
+                            this.$message.success("已同意");
+                        }
+                        else{
+                            this.$message({
+                                type: 'error',
+                                message: '文章获取失败！'
+                            });
+                        }
+                    })
+            },
         },
         components: {
         },
@@ -71,24 +140,12 @@
 
         },
         created() {
-            this.get_article();
+            this.get_article(0);
         }
     }
 </script>
 
 <style scoped>
-    .C{
-        background-color: white;
-    }
-
-    .top1{
-        height: 40px;
-        font-size: 20px;
-        font-weight: 500;
-        position: relative;
-        left: 20px;
-        top: 20px;
-    }
     .top{
         height: 40px;
 
@@ -105,10 +162,11 @@
     }
 
     .content{
-        margin-top: 10px;
+        width: 1200px;
+        margin-top:   150px;
         position: relative;
         background-color: white;
-        height: 200px;
-        padding: 20px 15px 30px 20px;
+
+        padding: 50px 15px 60px 20px;
     }
 </style>
