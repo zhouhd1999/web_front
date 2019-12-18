@@ -11,11 +11,12 @@
             </el-table-column>
             <el-table-column prop="userAccount" label="用户账号" width="180">
             </el-table-column>
-            <el-table-column label="操作"width="350">
+            <el-table-column label="操作" width="350">
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            @click="handleDelete(scope.$index, scope.row)">编辑</el-button>
+                            @click="handleDelete(scope.$index, scope.row)">编辑
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -34,9 +35,9 @@
                 </el-option>
             </el-select>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="SelectPermission()">确 定</el-button>
-  </span>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="SelectPermission()">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -45,20 +46,20 @@
     export default {
         data() {
             return {
-                tableData:[],
-                realData:[],
+                tableData: [],
+                realData: [],
                 dialogVisible: false,
                 options: [
                     {
-                    value: '-1',
-                    label: '黑名单'
-                },{
-                    value: '1',
-                    label: '普通用户'
-                }, {
-                    value: '2',
-                    label: '超级会员'
-                }],
+                        value: '-1',
+                        label: '黑名单'
+                    }, {
+                        value: '1',
+                        label: '普通用户'
+                    }, {
+                        value: '2',
+                        label: '超级会员'
+                    }],
                 value: ''
             }
         },
@@ -88,12 +89,12 @@
                         }
                     })
             },
-            SelectPermission(){
-                if (this.value==""){
+            SelectPermission() {
+                if (this.value == "") {
                     this.$message.error("请重新选择！");
                     return;
                 }
-                this.realData.userPermission=this.value;
+                this.realData.userPermission = this.value;
                 var data = this.realData;
                 this.$req.post('/user/update_user', data)
                     .then(res => {
@@ -104,12 +105,12 @@
                             this.$message.error("更新失败");
                         }
                     })
-                this.dialogVisible=false;
+                this.dialogVisible = false;
             },
             handleDelete(index, row) {
-                this.dialogVisible=true;
-                this.realData=row;
-                this.value=row.userPermission;
+                this.dialogVisible = true;
+                this.realData = row;
+                this.value = row.userPermission;
                 // this.realData[index].userPermission = -1;
                 // this.$req.post('/user/update_user', data)
                 //     .then(res => {
