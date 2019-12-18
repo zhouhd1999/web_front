@@ -28,8 +28,9 @@
                         v-model="item.articleContent"
                 >
                 </el-input>
-                    <el-button type="primary" style="float: right;margin: 5px" @click="delArticle(item)">删除</el-button>
-                    <el-button type="primary" style="float: right;margin: 5px" @click="pasArticle(item)">通过</el-button>
+                    <el-button type="primary" style="float: right;margin: 5px" @click="delArticle(index)">删除</el-button>
+                    <el-button type="primary" style="float: right;margin: 5px" @click="pasArticle(index)">通过</el-button>
+
                 </div>
             </div>
         </div>
@@ -53,7 +54,7 @@
         },
         methods:{
             ShowArticle(index){
-                 this.article[index].isShow=!this.article[index].isShow
+                 this.article[index].isShow=!this.article[index].isShow;
                 console.log(this.article[index].isShow)
 
             },
@@ -69,11 +70,13 @@
                                     articleName:'',
                                     nickname:'',
                                     articleContent:'',
+                                    articleId:'',
                                     isShow:false
                                 });
                             }
                             for(let i = 0; i < res.data.length;i++)
                               {
+                                   this.article[i].articleId = res.data[i].article.articleId;
                                    this.article[i].articleName=res.data[i].article.articleName;
                                    this.article[i].articleDescribe=res.data[i].article.articleDescribe;
                                    this.article[i].nickname=res.data[i].nickname;
@@ -88,14 +91,15 @@
                         }
                     })
             },
-            delArticle(item){
-                console.log(item.article.articleId)
+            delArticle(index){
+                console.log(this.article[index].articleId)
                 this.$req.post('/article/update_article_state',{
                     state:-1,
-                    article:item.article.articleId
+                    article:this.article[index].articleId
                 })
                     .then(res =>{
                         if(res.code === 0){
+                            this.article = [];
                             this.get_article();
                             this.$message.success("已拒绝");
                         }
@@ -107,12 +111,14 @@
                         }
                     })
             },
-            pasArticle(item){
+            pasArticle(index){
                 this.$req.post('/article/update_article_state',{
-                    articleId:item.article.articleId
+                    state:1,
+                    article:this.article[index].articleId
                 })
                     .then(res =>{
                         if(res.code === 0){
+                            this.article = [];
                             this.get_article();
                             this.$message.success("已同意");
                         }
