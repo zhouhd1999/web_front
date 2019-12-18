@@ -21,7 +21,7 @@ import UserController from "../views/UserController";
 import ArticleManagement from "../views/ArticleManagement";
 import Contribution from "../views/Contribution";
 import TagManagement from "../views/TagManagement";
-
+import AboutMe from "../views/AboutMe/AboutMe";
 
 
 
@@ -86,6 +86,11 @@ const routes = [
         component:PHP,
       },
       {
+        path:'AboutMe',
+        name:'AboutMe',
+        component:AboutMe,
+      },
+      {
         path:'Python',
         name:'Python',
         component:Python,
@@ -116,6 +121,9 @@ const routes = [
     path:'/Background',
     name:'Background',
     component:Background,
+    meta: {
+      requirePermission: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
     children: [
       {
         path: 'UserController',
@@ -145,6 +153,9 @@ const routes = [
     path:'/Person',
     name:'Person',
     component:Person,
+    meta: {
+      requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
   },
   {
     path:'/Article_edit',
@@ -160,21 +171,33 @@ const routes = [
     path:'/UserController',
     name:'UserController',
     component:UserController,
+    meta: {
+      requirePermission: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
   },
   {
     path:'/ArticleManagement',
     name:'ArticleManagement',
     component:ArticleManagement,
+    meta: {
+      requirePermission: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
   },
   {
     path:'/Contribution',
     name:'Contribution',
     component:Contribution,
+    meta: {
+      requirePermission: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
   },
   {
     path:'/TagManagement',
     name:'TagManagement',
     component:TagManagement,
+    meta: {
+      requirePermission: true,  // 添加该字段，表示进入这个路由是需要登录的
+    },
   }
 
 ]
@@ -183,6 +206,34 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+
+  if (to.meta.requirePermission) {  // 判断该路由是否需要登录权限
+    if (sessionStorage.getItem('userPermission')==='0') {  // 通过vuex state获取当前的token是否存在
+      next();
+    }
+    else {
+      next({
+        path: '/',
+        //query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      })
+    }
+  }else if (to.meta.requireAuth){
+    if (sessionStorage.length>0) {  // 通过vuex state获取当前的token是否存在
+      next();
+    }
+    else {
+      next({
+        path: '/',
+        //query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      })
+    }
+  }
+  else {
+    next();
+  }
 })
 
 export default router

@@ -49,19 +49,20 @@
               append-to-body>
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="账号" prop="acct">
-            <el-input v-model="ruleForm.acct" autocomplete="off"></el-input>
+            <el-input placeholder="请输入账号" v-model="ruleForm.acct" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+            <el-input placeholder="请输入密码" type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+            <el-input placeholder="请再次输入密码" type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="验证码" prop="checkGraph">
-            <el-input  placeholder="请输入验证码" class="yanzhengma_input"  v-model="ruleForm.checkGraph" autocomplete="off"/>
-            <input type="button"  @click="createCode"  class="verification" v-model="Graph"/>
-
+            <div style="width: 40%">
+              <el-input  placeholder="请输入验证码" class="yanzhengma_input"  v-model="ruleForm.checkGraph" autocomplete="off"/>
+            </div>
           </el-form-item>
+          <el-tag type="info" @click="createCode" class="verification" >{{Graph}}</el-tag>
           <!--              <el-form-item label="手机号码" prop="age">-->
           <!--                <el-input v-model.number="ruleForm.age"></el-input>-->
           <!--              </el-form-item>-->
@@ -73,10 +74,10 @@
       </el-dialog>
       <el-form :model="ruleForm1" status-icon :rules="rules1" ref="ruleForm1" label-width="100px">
         <el-form-item label="用户名" prop="name">
-          <el-input v-model.number="ruleForm1.name"></el-input>
+          <el-input placeholder="请输入用户名" v-model.number="ruleForm1.name"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm1.pass" autocomplete="off"></el-input>
+          <el-input placeholder="密码" type="password" v-model="ruleForm1.pass" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" style="padding: 0 0 20px">
@@ -164,7 +165,7 @@
 
       return{
 
-        backgroundManagement:true,
+        backgroundManagement:false,
         Graph:'',
         realGraph:'',
         ruleForm: {
@@ -206,7 +207,7 @@
             { validator: checkUser, trigger: 'blur' }
           ]
         },
-        circleUrl: '',
+        circleUrl: this.GLOBAL.circleUrl,
         outVisible:false,
         innerVisible:false,
         LoginBtn:true,
@@ -217,13 +218,6 @@
     },
 
     methods:{
-
-      check_background_management:function(){
-        //console.log(typeof sessionStorage.getItem('userId'))
-        if(sessionStorage.getItem('userId')==='2'){
-          this.backgroundManagement=true;
-        }
-      },
 
       register_cancel:function(){
         this.innerVisible=false;
@@ -261,7 +255,7 @@
               userAccount:this.ruleForm.acct,
               userPassword:this.ruleForm.pass,
               userNickname:this.ruleForm.acct,
-              userPermission:2
+              userPermission:1
             })
                     .then(res=>{
                       if (res.code===0){
@@ -269,9 +263,14 @@
                           type: 'success',
                           message:'注册成功'
                         });
+
                         this.ruleForm1.name=this.ruleForm.acct;
                         this.ruleForm1.pass=this.ruleForm.pass;
                         this.innerVisible=false;
+                        this.ruleForm.acct='';
+                        this.ruleForm.pass='';
+                        this.ruleForm.checkPass='';
+                        this.ruleForm.checkGraph='';
                       }else if (res.code===2){
                         this.$message({
                           type: 'error',
@@ -334,6 +333,8 @@
             })
                     .then(res=>{
                       if (res.code===0){
+                        this.ruleForm1.name='';
+                        this.ruleForm1.pass='';
                         this.data=res.data;
                         this.$message({
                           type: 'success',
@@ -343,6 +344,9 @@
                         this.outVisible=false;
                         this.WelcomeBtn=true;
                         this.LoginBtn=false;
+                        if (this.data.userPermission===0){
+                          this.backgroundManagement=true
+                        }
                         sessionStorage.setItem('userId',this.data.userId);
                         sessionStorage.setItem('userAccount',this.data.userAccount);
                         sessionStorage.setItem('userPermission',this.data.userPermission);
@@ -352,7 +356,11 @@
                         })
                                 .then(res1=>{
                                   if(res1.code===0){
-                                    this.circleUrl=require('@/assets/image/'+res1.data.infoHeadUrl);
+
+                                   //this.GLOBAL.setCircleUrl();
+                                    this.circleUrl=require('@/assets/image/'+res1.data.infoHeadUrl)
+                                    //console.log(this.GLOBAL.circleUrl)
+                                   // this.circleUrl
                                     sessionStorage.setItem('circleUrl',this.circleUrl)
                                     //console.log(sessionStorage.getItem('circleUrl'))
                                   }
@@ -363,6 +371,7 @@
                           type: 'error',
                           message: '账号或密码错误'
                         });
+                        this.ruleForm1.pass=''
                       }
                     })
           }else {
@@ -399,14 +408,13 @@
         this.LoginBtn=false;
         this.WelcomeBtn=true;
       }
-      this.check_background_management();
     },
     watch:{
       $route(to,from){
 
         this.circleUrl=sessionStorage.getItem('circleUrl');
         console.log(this.circleUrl)
-        if (to.path.indexOf("/Body")>=0||to.name==='Index'){
+        if (to.path.indexOf("/Body")>=0&&sessionStorage.length>0||to.name==='Index'&&sessionStorage.length>0){
           this.WelcomeBtn=true;
         }else{
           this.WelcomeBtn=false;
@@ -448,27 +456,26 @@
 
   .yanzhengma_input{
     font-family: 'Exo 2', sans-serif;
-    border: 1px solid #fff;
     color: #fff;
     outline: none;
     border-radius: 12px;
     letter-spacing: 1px;
     font-size: 17px;
     font-weight: normal;
-    background-color: rgba(82, 56, 76, 0.15);
     padding: 5px 0 5px 10px;
-    margin-left: 30px;
     height: 30px;
-    margin-top: 25px;
-    border: 1px solid #e6e6e6;
+    margin-left: -10px;
   }
   .verification{
     border-radius: 12px;
-    width:100px;
-    letter-spacing:5px;
-    margin-left: 50px;
+    width:90px;
+    letter-spacing:14px;
+    float: right;
     height: 40px;
     transform: translate(-15px,0);
+    position: relative;
+    bottom: 53px;
+    right: 138px;
   }
   .captcha{
     height: 50px;

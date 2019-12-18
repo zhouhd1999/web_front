@@ -145,73 +145,104 @@
                         message:'请先完善信息!'
                     });
                 }else{
-                    if (sessionStorage.getItem('userPermission')==='1'){
-                        this.$confirm('确认提交?', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                        }).then(() => {
-                            this.$req.post('/article/insert_article',{
-                                userId:sessionStorage.getItem('userId'),
-                                tagId:this.radio,
-                                articleContent:this.value,
-                                articleName:this.title,
-                                articleDescribe:this.describe,
-                                articleState:0,
-                                articlePreviewImg:this.file_name
-                            })
-                                .then(res=>{
-                                    if (res.code===0){
-                                        this.radio='';
-                                        this.value='';
-                                        this.title='';
-                                        this.describe='';
-                                        this.imageUrl='';
-                                        this.$message({
-                                            type: 'success',
-                                            message:'提交成功!'
-                                        });
-                                    }else{
-                                        this.$message({
-                                            type: 'error',
-                                            message:'提交失败，请稍后重试!'
-                                        });
-                                    }
+                    if (this.flag===1){
+                        if (sessionStorage.getItem('userPermission')==='0'){
+                            this.$confirm('确认提交?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                            }).then(() => {
+                                this.$req.post('/article/insert_article',{
+                                    userId:sessionStorage.getItem('userId'),
+                                    tagId:this.radio,
+                                    articleContent:this.value,
+                                    articleName:this.title,
+                                    articleDescribe:this.describe,
+                                    articleState:0,
+                                    articlePreviewImg:this.file_name
                                 })
-                        });
-                    }
-                    else{
-                        this.$confirm('点击确定后将提交到管理员出审核, 是否继续?', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                        }).then(() => {
-                            this.$req.post('/article/insert_article',{
-                                userId:sessionStorage.getItem('userId'),
-                                tagId:this.radio,
-                                articleContent:this.value,
-                                articleName:this.title,
-                                articleDescribe:this.describe,
-                                articleState:1,
-                                articlePreviewImg:this.file_name
-                            })
-                                .then(res=>{
-                                    if (res.code===0){
-                                        this.radio='';
-                                        this.value='';
-                                        this.title='';
-                                        this.describe='';
-                                        this.imageUrl='';
-                                        this.$message({
-                                            type: 'info',
-                                            message:'已提交到管理员处审核，请耐心等待!'
-                                        });
-                                    }else{
-                                        this.$message({
-                                            type: 'error',
-                                            message:'提交失败，请稍后重试!'
-                                        });
-                                    }
+                                    .then(res=>{
+                                        if (res.code===0){
+                                            this.radio='';
+                                            this.value='';
+                                            this.title='';
+                                            this.describe='';
+                                            this.imageUrl='';
+                                            this.$message({
+                                                type: 'success',
+                                                message:'提交成功!'
+                                            });
+                                        }else{
+                                            this.$message({
+                                                type: 'error',
+                                                message:'提交失败，请稍后重试!'
+                                            });
+                                        }
+                                    })
+                            });
+                        }
+                        else{
+                            this.$confirm('点击确定后将提交到管理员出审核, 是否继续?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                            }).then(() => {
+                                this.$req.post('/article/insert_article',{
+                                    userId:sessionStorage.getItem('userId'),
+                                    tagId:this.radio,
+                                    articleContent:this.value,
+                                    articleName:this.title,
+                                    articleDescribe:this.describe,
+                                    articleState:1,
+                                    articlePreviewImg:this.file_name
                                 })
-                        });
+                                    .then(res=>{
+                                        if (res.code===0){
+                                            this.radio='';
+                                            this.value='';
+                                            this.title='';
+                                            this.describe='';
+                                            this.imageUrl='';
+                                            this.$message({
+                                                type: 'info',
+                                                message:'已提交到管理员处审核，请耐心等待!'
+                                            });
+                                        }else{
+                                            this.$message({
+                                                type: 'error',
+                                                message:'提交失败，请稍后重试!'
+                                            });
+                                        }
+                                    })
+                            });
+                        }
+                    }else{
+                        this.$req.post('/article/update_article',{
+                            userId:sessionStorage.getItem('userId'),
+                            articleId:this.articleId,
+                            tagId:this.radio,
+                            articleContent:this.value,
+                            articleName:this.title,
+                            articleDescribe:this.describe,
+                            articleState:0,
+                            articlePreviewImg:this.file_name
+                        })
+                            .then(res=>{
+                                if (res.code===0){
+                                    this.radio='';
+                                    this.value='';
+                                    this.title='';
+                                    this.describe='';
+                                    this.imageUrl='';
+                                    this.$message({
+                                        type: 'success',
+                                        message:'保存成功!'
+                                    });
+                                }else{
+                                    this.$message({
+                                        type: 'error',
+                                        message:'保存失败，请稍后重试!'
+                                    });
+                                }
+                            })
                     }
 
                 }
@@ -252,6 +283,7 @@
                         userId:sessionStorage.getItem('userId'),
                         tagId:this.radio,
                         articleContent:this.value,
+                        articleId:this.articleId,
                         articleName:this.title,
                         articleDescribe:this.describe,
                         articleState:2,
@@ -288,12 +320,13 @@
                 })
                     .then(res=>{
                         if (res.code===0){
-                            console.log(res.data);
-                            this.value=res.data.articleContent;
-                            this.title=res.data.articleName;
-                            this.describe=res.data.articleDescribe;
-                            this.radio=res.tagId;
-                            this.imageUrl=require('@/assets/image/'+res.data.articlePreviewImg);
+
+                            this.value=res.data.article.articleContent;
+                            this.title=res.data.article.articleName;
+                            this.describe=res.data.article.articleDescribe;
+                            this.radio=res.data.article.tagId;
+                            this.imageUrl=require('@/assets/image/'+res.data.article.articlePreviewImg);
+                            this.file_name=res.data.article.articlePreviewImg
                         }
                     })
             }

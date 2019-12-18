@@ -16,7 +16,7 @@
                     </div>
                     <div class="mid">
                         <el-row>
-                            <el-col :span="6"><img :src="hhh" style="height: 160px" /></el-col>
+                            <el-col :span="6"><img :src="require('../../assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                             <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                         </el-row>
                     </div>
@@ -122,7 +122,7 @@
 
             get_article:function () {
                 this.$req.post('/article/get_article_by_tag_id', {
-                    tagId: 6,
+                    tagId: 68,
                 })
                     .then(res => {
                         if (res.code === 0) {

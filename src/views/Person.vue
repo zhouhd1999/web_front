@@ -59,10 +59,10 @@
                                         <span style="margin-left: 8px;font-size: 16px;position: relative;top: -2px">{{item.tagName}}</span>
                                         <div style="font-size: 20px;position: relative;top: -36px;margin-left: 180px">
                                             <el-button type="text" style="font-size: 20px" @click="open_article(item,index)">{{item.article.articleName}}</el-button>
-                                            <span v-if="(item.article.articleState===1)" style="position: relative;float: right">
+                                            <span v-if="(item.article.articleState===0)" style="position: relative;float: right">
                                             <img :src="shenhezhong" style="width: 80px;height: 80px">
                                         </span>
-                                            <span v-if="(item.article.articleState===0)" style="position: relative;float: right">
+                                            <span v-if="(item.article.articleState===1)" style="position: relative;float: right">
                                             <img :src="shenhetongguo" style="width: 80px;height: 80px">
                                         </span>
                                             <span v-if="(item.article.articleState===-1)" style="position: relative;float: right">
@@ -72,8 +72,8 @@
                                     </div>
                                     <div class="mid">
                                         <el-row>
-                                            <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                            <el-col :span="17">
+                                            <el-col :span="8"><img :src="require('@/assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                                            <el-col :span="16">
                                                 <div style="padding: 10px;position: relative;bottom: 80px">
                                                 <span style="word-break: break-all;color: #777">
                                                     {{item.article.articleDescribe}}<br/>
@@ -109,8 +109,8 @@
                                 </div>
                                 <div class="mid">
                                     <el-row>
-                                        <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
-                                        <el-col :span="17"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
+                                        <el-col :span="8"><img :src="require('@/assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                                        <el-col :span="16"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                                     </el-row>
                                 </div>
                                 <div class="bottom" style="float: right;font-size: 14px;color: #777">
@@ -272,7 +272,7 @@
                 }
             };
             return {
-                data: [{label:"我的网盘", id:1,children: []}],
+                data: [],
                 ruleForm: {
                     nickname: '',
                     age: '',
@@ -301,7 +301,7 @@
                 age: "",
                 fileName:'',
                 file: '',
-                tell: "",
+                tell: '',
                 node: '',
                 node_data: '',
                 profession: "",
@@ -314,7 +314,8 @@
         methods: {
             handleAvatarSuccess(res, file) {
                 this.$message.success('上传成功');
-                this.circleUrl=require('@/assets/image/'+file.name);
+                //this.GLOBAL.setCircleUrl();
+                this.circleUrl=require('@/assets/image/'+file.name)
                 sessionStorage.setItem('circleUrl',this.circleUrl);
                 console.log(this.circleUrl)
             },
@@ -644,10 +645,16 @@
                 })
                     .then(res=>{
                         if (res.code===0){
+                            console.log(res.data);
                             this.ID=sessionStorage.getItem('userAccount');
                             this.nickname=sessionStorage.getItem('userNickname');
                             this.age=res.data.infoAge;
-                            this.tell=parseInt(res.data.infoPhoneNumber);
+                            if (res.data.infoPhoneNumber===null){
+                                this.tell='';
+                            }else{
+                                this.tell=parseInt(res.data.infoPhoneNumber);
+                            }
+
                             this.profession=res.data.infoProfession;
                             this.introduction=res.data.infoIntroduction;
 
@@ -677,7 +684,7 @@
             },
             upData:function(){
                 return {
-                    userId: 2
+                    userId: sessionStorage.getItem('userId')
                 }
             },
         },

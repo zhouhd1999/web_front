@@ -154,9 +154,7 @@
 </script>
 
 <style scoped>
-    el-button{
 
-    }
     .kongxin{
         width:0;
         height:0;
@@ -180,6 +178,7 @@
         margin: 6px 0 6px 0;
     }
     .leavemessage{
+        min-height: 600px;
         background-color: white;
     }
     .top{

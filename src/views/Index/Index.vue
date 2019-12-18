@@ -37,7 +37,7 @@
                 </div>
                 <div class="mid">
                     <el-row>
-                        <el-col :span="6"><img :src="require('@/assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                        <el-col :span="6"><img :src="require('../../assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                         <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe| ellipsis}}<br/></span></div></el-col>
                     </el-row>
                 </div>
@@ -89,25 +89,25 @@
         },
         methods:{
             goto:function(tag_id){
-                if (tag_id===0){
+                if (tag_id===74){
                     this.$router.push('/Body/Other');
                 }
-                if (tag_id===1){
+                if (tag_id===70){
                     this.$router.push('/Body/Java');
                 }
-                if (tag_id===2){
+                if (tag_id===71){
                     this.$router.push('/Body/C');
                 }
-                if (tag_id===4){
+                if (tag_id===104){
                     this.$router.push('/Body/PersonShow');
                 }
-                if (tag_id===3){
+                if (tag_id===73){
                     this.$router.push('/Body/Python');
                 }
-                if (tag_id===6){
+                if (tag_id===68){
                     this.$router.push('/Body/PersonDiary');
                 }
-                if (tag_id===9){
+                if (tag_id===72){
                     this.$router.push('/Body/PHP');
                 }
             },
@@ -253,7 +253,13 @@
                 this.$req.post('/article/get_article')
                     .then(res=>{
                         if(res.code===0){
-                            this.data=res.data;
+                            let arr=[];
+                            res.data.forEach(function (c) {
+                                if (c.article.articleState===1){
+                                    arr.push(c)
+                                }
+                            })
+                            this.data=arr;
                         }else{
                             this.$message({
                                 type: 'error',
@@ -316,6 +322,7 @@
     .index{
         /*background-color: white;*/
         width: 100%;
+        min-height: 600px;
     }
 
     .rank{
