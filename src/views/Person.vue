@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="mid">
                                         <el-row>
-                                            <el-col :span="8"><img :src="require('@/assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                                            <el-col :span="8"><img :src="require('@/assets/article_img/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                                             <el-col :span="16">
                                                 <div style="padding: 10px;position: relative;bottom: 80px">
                                                 <span style="word-break: break-all;color: #777">
@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="mid">
                                     <el-row>
-                                        <el-col :span="8"><img :src="require('@/assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                                        <el-col :span="8"><img :src="require('@/assets/article_img/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                                         <el-col :span="16"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                                     </el-row>
                                 </div>
@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="mid">
                                     <el-row>
-                                        <el-col :span="7"><img :src="hhh" style="height: 160px" /></el-col>
+                                        <el-col :span="7"><img :src="require('@/assets/article_img/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                                         <el-col :span="17">
                                             <div style="padding: 10px">
                                                 <span style="word-break: break-all;color: #777;position: relative;bottom: 10px">

@@ -37,7 +37,7 @@
                 </div>
                 <div class="mid">
                     <el-row>
-                        <el-col :span="6"><img :src="require('../../assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                        <el-col :span="6"><img :src="require('@/assets/article_img/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                         <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe| ellipsis}}<br/></span></div></el-col>
                     </el-row>
                 </div>
@@ -144,19 +144,19 @@
                         .then(res1=>{
                             let currentAttitude=res1.data.userAttitude;
 
+                            if (currentAttitude===1){
+                                this.$message({
+                                    type: 'error',
+                                    message:'已喜欢'
+                                });
+                            }
                             //更新
-                            if (res1.code===0){
+                            else{
                                 this.$req.post('/attitude/click_attitude',{
                                     userId:sessionStorage.getItem('userId'),
                                     articleId:item.articleId,
                                     currentAttitude:currentAttitude,
                                     futureAttitude:1
-                                })
-                            }
-
-                            if (currentAttitude===0){
-                                this.$req.post('/article/like_article',{
-                                    articleId:item.articleId
                                 })
                                     .then(res=>{
                                         if (res.code===0){
@@ -168,16 +168,36 @@
                                         }else{
                                             this.$message({
                                                 type: 'error',
-                                                message:'系统异常'
+                                                message:'喜欢失败'
                                             });
                                         }
                                     })
-                            } else{
-                                this.$message({
-                                    type: 'error',
-                                    message:'已喜欢'
-                                });
                             }
+
+                            // if (currentAttitude===0){
+                            //     this.$req.post('/article/like_article',{
+                            //         articleId:item.articleId
+                            //     })
+                            //         .then(res=>{
+                            //             if (res.code===0){
+                            //                 this.$message({
+                            //                     type: 'success',
+                            //                     message:'喜欢成功'
+                            //                 });
+                            //                 this.hotRanking[index].articleLike+=1;
+                            //             }else{
+                            //                 this.$message({
+                            //                     type: 'error',
+                            //                     message:'系统异常'
+                            //                 });
+                            //             }
+                            //         })
+                            // } else{
+                            //     this.$message({
+                            //         type: 'error',
+                            //         message:'已喜欢'
+                            //     });
+                            // }
                         })
                 }
             },
@@ -195,18 +215,18 @@
                    })
                        .then(res1=>{
                            let currentAttitude=res1.data.userAttitude;
-                           if (res1.code===0){
+                           if (currentAttitude===1){
+                               this.$message({
+                                   type: 'error',
+                                   message:'已喜欢'
+                               });
+                           }
+                           else{
                                this.$req.post('/attitude/click_attitude',{
                                    userId:sessionStorage.getItem('userId'),
                                    articleId:item.article.articleId,
                                    currentAttitude:currentAttitude,
                                    futureAttitude:1
-                               })
-                           }
-
-                           if (currentAttitude===0){
-                               this.$req.post('/article/like_article',{
-                                   articleId:item.article.articleId
                                })
                                    .then(res=>{
                                        if (res.code===0){
@@ -218,16 +238,36 @@
                                        }else{
                                            this.$message({
                                                type: 'error',
-                                               message:'系统异常'
+                                               message:'喜欢失败'
                                            });
                                        }
                                    })
-                           } else{
-                               this.$message({
-                                   type: 'error',
-                                   message:'已喜欢'
-                               });
                            }
+
+                           // if (currentAttitude===0){
+                           //     this.$req.post('/article/like_article',{
+                           //         articleId:item.article.articleId
+                           //     })
+                           //         .then(res=>{
+                           //             if (res.code===0){
+                           //                 this.$message({
+                           //                     type: 'success',
+                           //                     message:'喜欢成功'
+                           //                 });
+                           //                 this.data[index].article.articleLike+=1;
+                           //             }else{
+                           //                 this.$message({
+                           //                     type: 'error',
+                           //                     message:'系统异常'
+                           //                 });
+                           //             }
+                           //         })
+                           // } else{
+                           //     this.$message({
+                           //         type: 'error',
+                           //         message:'已喜欢'
+                           //     });
+                           // }
 
 
                        })
@@ -260,6 +300,7 @@
                                 }
                             })
                             this.data=arr;
+                            console.log(this.data)
                         }else{
                             this.$message({
                                 type: 'error',

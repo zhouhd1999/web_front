@@ -5,7 +5,7 @@
             </el-table-column>
             <el-table-column prop="userPassword" label=用户密码" width="180">
             </el-table-column>
-            <el-table-column prop="userNickname" label="用户真实姓名" width="180">
+            <el-table-column prop="userNickname" label="用户昵称" width="180">
             </el-table-column>
             <el-table-column prop="userPermission" label="用户权限" width="180">
             </el-table-column>
@@ -81,7 +81,13 @@
                 this.$req.post('/user/get_all')
                     .then(res => {
                         if (res.code == 0) {
-                            this.tableData = res.data;
+                            let arr=[]
+                            res.data.forEach(function (c) {
+                                if (c.userPermission!=0){
+                                    arr.push(c)
+                                }
+                            })
+                            this.tableData = arr;
                             this.changePermission();
                             console.log(this.tableData)
                         } else {

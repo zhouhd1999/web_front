@@ -3,10 +3,10 @@
         <el-button @click="showArtileType()" autofocus="true">生活笔记</el-button>
         <el-button @click="showArtileType_1()">技术杂谈</el-button>
         <el-button @click="showArtileType_2()">未归档</el-button>
-        <div style="margin-top: -130px; height: 200px;">
+        <div style="margin-top: 20px">
             <el-collapse-transition>
-                <div>
-                    <div v-show="show3" v-for="(item,index) in article" class="content">
+                <div class="content">
+                    <div v-show="show3" v-for="(item,index) in article" style="padding: 0 0 20px 0;margin-bottom: 30px">
                         <div class="top">
                             <div style="font-size: 20px;position: relative;top: -20px;margin-left: 80px">
                                 <el-button type="text" style="font-size: 20px" @click="ShowArticle(index)">
@@ -17,16 +17,16 @@
 
                         <div class="mid">
                             <el-row>
-                                <el-col :span="8"><img style="height: 160px"/></el-col>
-                                <el-col :span="16">
+                                <el-col :span="6"><img :src="require('@/assets/article_img/'+item.articlePreviewImg)" style="height: 160px" /></el-col>
+                                <el-col :span="18">
                                     <div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span>
                                     </div>
                                 </el-col>
                             </el-row>
                         </div>
-                        <div class="bottom">
+                        <div class="bottom" style="float: right;position: relative;right: 20px;bottom: 20px">
                             <br>
-                            <el-col>{{item.nickname}}</el-col>
+                            <el-col ><i class="el-icon-user" style="margin-right: 10px"></i>{{item.nickname}}</el-col>
                         </div>
                         <el-divider></el-divider>
                         <div v-show=item.isShow >
@@ -177,6 +177,7 @@
                                     nickname:'',
                                     articleContent:'',
                                     isShow:false,
+                                    articlePreviewImg:'',
                                     isEdits:true,
                                 });
                             }
@@ -188,6 +189,7 @@
                                 this.article[i].articleDescribe=res.data[i].article.articleDescribe;
                                 this.article[i].nickname=res.data[i].nickname;
                                 this.article[i].articleContent=res.data[i].article.articleContent;
+                                this.article[i].articlePreviewImg=res.data[i].article.articlePreviewImg;
                             }
                             this.$message.success("成功！")
                             console.log(this.article)
@@ -249,7 +251,6 @@
 
     .content{
         width: 1200px;
-        margin-top:   150px;
         position: relative;
         background-color: white;
 

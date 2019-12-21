@@ -228,6 +228,7 @@
         //注销
         if (command==='cancellation'){
           sessionStorage.clear();
+          console.log(sessionStorage)
           this.$message({
             type: 'success',
             message:'注销成功'
@@ -346,6 +347,8 @@
                         this.LoginBtn=false;
                         if (this.data.userPermission===0){
                           this.backgroundManagement=true
+                        }else{
+                          this.backgroundManagement=false
                         }
                         sessionStorage.setItem('userId',this.data.userId);
                         sessionStorage.setItem('userAccount',this.data.userAccount);

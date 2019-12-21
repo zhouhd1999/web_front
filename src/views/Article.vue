@@ -2,6 +2,13 @@
     <div>
         <el-container>
             <el-aside width="250px">
+                <div style="position: fixed;left: 115px;bottom: 60px">
+                    <div class="left">
+                        <el-tooltip class="item" effect="dark" content="返回首页" placement="left-start">
+                            <el-button icon="el-icon-s-home" style="background-color:rgba(0,0,0,0);border: 0;font-size: 60px" circle @click="go_back('/')"></el-button>
+                        </el-tooltip>
+                    </div>
+                </div>
             </el-aside>
             <el-main>
                 <div style="background-color: white">
@@ -135,6 +142,10 @@
         },
         methods:{
 
+            go_back:function(index) {
+                this.$router.push(index);
+            },
+
             //分页
             handleSizeChange: function (size) {
                 this.pagesize = size;
@@ -177,7 +188,6 @@
                                     })
                                         .then(res1=>{
                                             if (res1.code===0){
-                                                this.value.article.articleHate-=1;
                                                 this.value.article.articleLike+=1;
                                                 this.$message({
                                                     type: 'success',
@@ -258,7 +268,6 @@
                                         .then(res1=>{
                                             if (res1.code===0){
                                                 this.value.article.articleHate+=1;
-                                                this.value.article.articleLike-=1;
                                                 this.$message({
                                                     type: 'success',
                                                     message:'反对成功'
@@ -315,12 +324,13 @@
                             .then(res=>{
                                 let arr=[];
                                 res.data.forEach(function (c) {
-                                    if (c.discussion.replayId==null){
+                                    if (c.discussion.replayId===0){
                                         arr.push(c)
                                     }
                                 })
 
                                 this.InitMessage=arr;
+                                console.log(this.InitMessage)
                                 resolve()
                             })
                     }

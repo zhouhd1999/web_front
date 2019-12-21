@@ -1,7 +1,7 @@
 <template>
     <div >
-        <div style="margin-top: -150px">
-            <div v-for="(item,index) in article" class="content">
+        <div class="content">
+            <div v-for="(item,index) in article" style="padding: 0 0 20px 0;margin-bottom: 30px">
                 <div class="top">
                     <div style="font-size: 20px;position: relative;top: -20px;margin-left: 80px">
                         <el-button type="text" style="font-size: 20px" @click="ShowArticle(index)">{{item.articleName}}</el-button>
@@ -10,13 +10,13 @@
 
                 <div class="mid">
                     <el-row>
-                        <el-col :span="8"><img :src="hhh" style="height: 160px" /></el-col>
-                        <el-col :span="16"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
+                        <el-col :span="6"><img :src="require('@/assets/article_img/'+item.articlePreviewImg)" style="height: 160px" /></el-col>
+                        <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.articleDescribe}}<br/></span></div></el-col>
                     </el-row>
                 </div>
-                <div class="bottom">
+                <div class="bottom" style="float: right;position: relative;right: 20px;bottom: 20px">
                     <br>
-                    <el-col >{{item.nickname}}</el-col>
+                    <el-col ><i class="el-icon-user" style="margin-right: 10px"></i>{{item.nickname}}</el-col>
                 </div>
                 <el-divider></el-divider>
                 <div  v-show=item.isShow>
@@ -71,6 +71,7 @@
                                     nickname:'',
                                     articleContent:'',
                                     articleId:'',
+                                    articlePreviewImg:'',
                                     isShow:false
                                 });
                             }
@@ -81,6 +82,7 @@
                                    this.article[i].articleDescribe=res.data[i].article.articleDescribe;
                                    this.article[i].nickname=res.data[i].nickname;
                                    this.article[i].articleContent=res.data[i].article.articleContent;
+                                  this.article[i].articlePreviewImg=res.data[i].article.articlePreviewImg;
                               }
                             console.log("放进去的数组"+this.article)
                         } else {
@@ -160,10 +162,8 @@
 
     .content{
         width: 1200px;
-        margin-top:   150px;
         position: relative;
         background-color: white;
-
         padding: 50px 15px 60px 20px;
     }
 </style>

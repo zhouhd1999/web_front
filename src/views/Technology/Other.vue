@@ -16,7 +16,7 @@
                     </div>
                     <div class="mid">
                         <el-row>
-                            <el-col :span="6"><img :src="require('../../assets/image/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
+                            <el-col :span="6"><img :src="require('@/assets/article_img/'+item.article.articlePreviewImg)" style="height: 160px" /></el-col>
                             <el-col :span="18"><div style="padding: 10px"><span style="word-break: break-all;color: #777">{{item.article.articleDescribe}}<br/></span></div></el-col>
                         </el-row>
                     </div>
@@ -126,7 +126,13 @@
                 })
                     .then(res => {
                         if (res.code === 0) {
-                            this.data = res.data;
+                            let arr=[];
+                            res.data.forEach(function (c) {
+                                if (c.article.articleState===1){
+                                    arr.push(c)
+                                }
+                            })
+                            this.data = arr;
                         } else {
                             this.$message({
                                 type: 'error',

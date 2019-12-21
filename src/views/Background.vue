@@ -41,7 +41,7 @@
 
 <!--            </el-container>-->
         <el-container style="height: 100%">
-            <el-aside width="200px" >
+            <el-aside width="200px" style="min-height: 600px;background-color: white">
                 <el-menu :default-openeds="['1', '3']">
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-message"></i>博主服务</template>

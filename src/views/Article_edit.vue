@@ -2,6 +2,13 @@
     <div>
         <el-container>
             <el-aside width="280px">
+                <div style="position: fixed;left: 115px;bottom: 60px">
+                    <div class="left">
+                        <el-tooltip class="item" effect="dark" content="返回首页" placement="left-start">
+                            <el-button icon="el-icon-s-home" style="background-color:rgba(0,0,0,0);border: 0;font-size: 60px" circle @click="go_back('/')"></el-button>
+                        </el-tooltip>
+                    </div>
+                </div>
             </el-aside>
             <el-main>
                 <div style="background-color: white">
@@ -106,6 +113,9 @@
             };
         },
         methods:{
+            go_back:function(index) {
+                this.$router.push(index);
+            },
 
             handleAvatarSuccess(res, file) {
                 this.file_name=file.name;
@@ -157,7 +167,7 @@
                                     articleContent:this.value,
                                     articleName:this.title,
                                     articleDescribe:this.describe,
-                                    articleState:0,
+                                    articleState:1,
                                     articlePreviewImg:this.file_name
                                 })
                                     .then(res=>{
@@ -181,7 +191,7 @@
                             });
                         }
                         else{
-                            this.$confirm('点击确定后将提交到管理员出审核, 是否继续?', '提示', {
+                            this.$confirm('点击确定后将提交到管理员处审核, 是否继续?', '提示', {
                                 confirmButtonText: '确定',
                                 cancelButtonText: '取消',
                             }).then(() => {
@@ -191,7 +201,7 @@
                                     articleContent:this.value,
                                     articleName:this.title,
                                     articleDescribe:this.describe,
-                                    articleState:1,
+                                    articleState:0,
                                     articlePreviewImg:this.file_name
                                 })
                                     .then(res=>{
@@ -234,12 +244,12 @@
                                     this.imageUrl='';
                                     this.$message({
                                         type: 'success',
-                                        message:'保存成功!'
+                                        message:'已提交到管理员处审核，请耐心等待!'
                                     });
                                 }else{
                                     this.$message({
                                         type: 'error',
-                                        message:'保存失败，请稍后重试!'
+                                        message:'提交失败，请稍后重试!'
                                     });
                                 }
                             })
@@ -325,7 +335,7 @@
                             this.title=res.data.article.articleName;
                             this.describe=res.data.article.articleDescribe;
                             this.radio=res.data.article.tagId;
-                            this.imageUrl=require('@/assets/image/'+res.data.article.articlePreviewImg);
+                            this.imageUrl=require('@/assets/article_img/'+res.data.article.articlePreviewImg);
                             this.file_name=res.data.article.articlePreviewImg
                         }
                     })
